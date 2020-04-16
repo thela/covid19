@@ -1,0 +1,12 @@
+/* Styles go here */
+
+.hide{
+  display:none;
+}
+.center {
+  text-align:center;
+}
+.sameline {
+    display:inline-block;
+    width: 45%;
+}

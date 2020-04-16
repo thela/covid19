@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- loading local stylesheet .css file -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+
+</head>
+
+<body>
+    <div>
+    <!--  <canvas> element is used to draw graphics on a web page. -->
+        <div class="sameline">
+            <canvas id="italia_analysis" height="400" ></canvas>
+        </div>
+        <div class="sameline">
+            <canvas id="roma_analysis" height="400"></canvas>
+        </div>
+    </div>
+    <div>
+        <div class="sameline">
+            <canvas id="plot_newcases_vs_totalcases" height="400"></canvas>
+        </div>
+        <div class="sameline">
+            <canvas id="plot_newcases_vs_totalcases_regioni" height="400"></canvas>
+        </div>
+    </div>
+
+    <!-- (best practice to load all the script files at the bottom) -->
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- loading a javascript library for data visualization Charts.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+    <!-- local javascript file -->
+    <script src="palette.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
