@@ -314,9 +314,6 @@ var jsonData = $.ajax({
             }],
             yAxes: [{
                 type: 'logarithmic',
-                ticks: {
-                    min: 100,
-                },
                 scaleLabel: {
                     display: true,
                     labelString: 'New confirmed cases (weekly mean) '
@@ -381,9 +378,6 @@ var jsonData = $.ajax({
             }],
             yAxes: [{
                 type: 'logarithmic',
-                ticks: {
-                    min: 100,
-                },
                 scaleLabel: {
                     display: true,
                     labelString: 'New confirmed cases (weekly mean) '
