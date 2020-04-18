@@ -269,7 +269,7 @@ var jsonData = $.ajax({
     var countries = Object.keys(jsonData).map(function(item) {
         return item;
     });
-    var borderColors = palette('tol', countries.length).map(function(hex) {
+    var borderColors = palette('tol-dv', countries.length).map(function(hex) {
             return '#' + hex;
         })
 
@@ -339,7 +339,7 @@ var jsonData = $.ajax({
     var regioni = Object.keys(jsonData).map(function(item) {
         return item;
     });
-    var borderColors = palette('tol', regioni.length).map(function(hex) {
+    var borderColors = palette('tol-dv', regioni.length).map(function(hex) {
             return '#' + hex;
         })
 

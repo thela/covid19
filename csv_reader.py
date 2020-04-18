@@ -53,6 +53,7 @@ class DpcCovidData:
 
     def get_data_regioni(self):
         data_regioni = {}
+        regioni = set()
         for daily_filename in os.listdir(self.dati_regioni_folder):
             try:
                 date = datetime.datetime.strptime(daily_filename[24:32], '%Y%m%d').date()
@@ -67,6 +68,7 @@ class DpcCovidData:
                         reader_list = list(csv.DictReader(csvfile, delimiter=',', quotechar='"'))
                 res = {}
                 for regione in reader_list:
+                    regioni.add(regione['denominazione_regione'])
                     if regione['denominazione_regione'] not in res:
                         res[regione['denominazione_regione']] = {
                             label: regione[label] for label in self.dati_province_labels
@@ -77,7 +79,7 @@ class DpcCovidData:
             except ValueError:
                 pass
 
-        return data_regioni
+        return data_regioni, list(regioni)
 
     def get_regione(self, regione):
         return {day: self.data_regioni[day][regione] for day in self.data_regioni.keys()}
@@ -168,7 +170,7 @@ class DpcCovidData:
         plt.show()
 
     def roma_analysis(self, ax=None, json_save=False):
-        if not ax:
+        if not ax and not json_save:
             fig, ax = plt.subplots()
             fig.autofmt_xdate()
 
@@ -279,6 +281,8 @@ class DpcCovidData:
         return total_cases, new_cases_average
 
     def plot_newcases_vs_totalcases_regioni(self, regioni, ax=None, json_save=False):
+        if regioni == 'all':
+            regioni = self.regioni
         if not ax and not json_save:
             fig, ax = plt.subplots()
             fig.autofmt_xdate()
@@ -356,7 +360,7 @@ class DpcCovidData:
 
     def __init__(self):
         self.data_province = self.get_data_province()
-        self.data_regioni = self.get_data_regioni()
+        self.data_regioni, self.regioni = self.get_data_regioni()
         self.data_nazionale = self.get_data_nazionale()
 
 
@@ -559,6 +563,9 @@ class CssegiCovidData:
             fig, ax = plt.subplots()
             fig.autofmt_xdate()
 
+        if countries == 'all':
+            countries = self.countries
+
         plots = []
         if json_save:
             json_data = {}
@@ -644,75 +651,73 @@ def exp_fit(x_list, y_list, guess_origin=False, point1=9, point2=16):
 
 
 if __name__ == "__main__":
-    import matplotlib as mpl
-    import matplotlib.pyplot as plt
-
-    import matplotlib.font_manager as fm
-
-    # Collect all the font names available to matplotlib
-    #font_names = [f.name for f in fm.fontManager.ttflist]
-
-    #fig, ax = plt.subplots(121)
-    #fig.autofmt_xdate()
-    #fig = plt.figure()
-    # Create figure object and store it in a variable called 'fig'
-    fig = plt.figure(figsize=(4, 4))
-    mpl.rcParams['font.family'] = 'Comfortaa'
-    plt.rcParams['font.size'] = 9
-    plt.rcParams['axes.linewidth'] = 2
-    # ===============
-    #  First subplot
-    # ===============
-    # set up the axes for the first plot
-    # [left, bottom, width, height]
+    only_json = True
     dpc_covid_data = DpcCovidData()
-    border = .05
-    subplot_size = .38
-    bottom_offset = .04
-    # ax1 = fig.add_subplot(2, 2, 3)
-    ax1 = fig.add_axes([border, border+bottom_offset, subplot_size, subplot_size])
-    ax1.figure.autofmt_xdate()
-    ax1.xaxis.set_tick_params(which='major', size=10, width=2, direction='in', top='on')
-    ax1.xaxis.set_tick_params(which='minor', size=7, width=2, direction='in', top='on')
-    ax1.yaxis.set_tick_params(which='major', size=10, width=2, direction='in', right='on')
-    ax1.yaxis.set_tick_params(which='minor', size=7, width=2, direction='in', right='on')
-    #dpc_covid_data.regione_analysis('Lazio', ax1)
-    dpc_covid_data.roma_analysis(ax1, json_save=True)
-    dpc_covid_data.roma_analysis(ax1, json_save=False)
-
-    # ax2 = fig.add_subplot(2, 2, 4)
-    ax2 = fig.add_axes([.5+border, border+bottom_offset, subplot_size, subplot_size])
-    ax2.figure.autofmt_xdate()
-    dpc_covid_data.italia_analysis(ax2, json_save=True)
-    dpc_covid_data.italia_analysis(ax2, json_save=False)
-
-    ax4 = fig.add_axes([.5+border, .5+border+bottom_offset, subplot_size, subplot_size])
-    dpc_covid_data.plot_newcases_vs_totalcases_regioni(
-        ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte'], ax4)
-    dpc_covid_data.plot_newcases_vs_totalcases_regioni(
-        ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte'], ax4,
-        json_save=True
-    )
-
     covid_data = CssegiCovidData()
-    ax3 = fig.add_axes([border, .5+border+bottom_offset, subplot_size, subplot_size])
-    covid_data.plot_newcases_vs_totalcases(
-        ['Italy', 'Spain', 'Iran', 'US', 'South Korea', 'United Kingdom', 'Japan'],
-        ax3)
-    covid_data.plot_newcases_vs_totalcases(
-        ['Italy', 'Spain', 'Iran', 'US', 'South Korea', 'United Kingdom', 'Japan'],
-        ax3,
-        json_save=True
-    )
-    plt.show()
-    '''
-    covid_data.plot_countries2(
-        ['Italy', 'Germany', 'Spain', 'Iran', 'US', 'India', 'Australia', 'United Kingdom', 'South Korea', 'China', 'Japan'],
-        ax3
-    )
-    dpc_covid_data.plot_province_per_regione('Lazio')
-    dpc_covid_data.plot_regioni(['Lazio', 'Lombardia', 'Veneto', 'Emilia Romagna'])
+    if only_json:
+        dpc_covid_data.roma_analysis(json_save=True)
+        dpc_covid_data.italia_analysis(json_save=True)
+        dpc_covid_data.plot_newcases_vs_totalcases_regioni(
+            ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte'], #'all',
+            json_save=True
+        )
+        covid_data.plot_newcases_vs_totalcases(
+            ['Italy', 'Spain', 'Iran', 'US', 'South Korea', 'United Kingdom', 'Japan'], #'all',
+            json_save=True
+        )
+    else:
+        import matplotlib as mpl
+        import matplotlib.pyplot as plt
 
-    if True:
-        covid_data = CssegiCovidData()
-        countries = list(covid_data.countries)'''
+        # Collect all the font names available to matplotlib
+        # import matplotlib.font_manager as fm
+        #font_names = [f.name for f in fm.fontManager.ttflist]
+
+        # Create figure object and store it in a variable called 'fig'
+        fig = plt.figure(figsize=(4, 4))
+        mpl.rcParams['font.family'] = 'Comfortaa'
+        plt.rcParams['font.size'] = 9
+        plt.rcParams['axes.linewidth'] = 2
+        # ===============
+        #  First subplot
+        # ===============
+        # set up the axes for the first plot
+        # [left, bottom, width, height]
+        border = .05
+        subplot_size = .38
+        bottom_offset = .04
+        # ax1 = fig.add_subplot(2, 2, 3)
+        ax1 = fig.add_axes([border, border+bottom_offset, subplot_size, subplot_size])
+        ax1.figure.autofmt_xdate()
+        ax1.xaxis.set_tick_params(which='major', size=10, width=2, direction='in', top='on')
+        ax1.xaxis.set_tick_params(which='minor', size=7, width=2, direction='in', top='on')
+        ax1.yaxis.set_tick_params(which='major', size=10, width=2, direction='in', right='on')
+        ax1.yaxis.set_tick_params(which='minor', size=7, width=2, direction='in', right='on')
+        #dpc_covid_data.regione_analysis('Lazio', ax1)
+        dpc_covid_data.roma_analysis(ax1, json_save=False)
+
+        # ax2 = fig.add_subplot(2, 2, 4)
+        ax2 = fig.add_axes([.5+border, border+bottom_offset, subplot_size, subplot_size])
+        ax2.figure.autofmt_xdate()
+        dpc_covid_data.italia_analysis(ax2, json_save=False)
+
+        ax4 = fig.add_axes([.5+border, .5+border+bottom_offset, subplot_size, subplot_size])
+        dpc_covid_data.plot_newcases_vs_totalcases_regioni(
+            ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte'], ax4)
+
+        ax3 = fig.add_axes([border, .5+border+bottom_offset, subplot_size, subplot_size])
+        covid_data.plot_newcases_vs_totalcases(
+            ['Italy', 'Spain', 'Iran', 'US', 'South Korea', 'United Kingdom', 'Japan'],
+            ax3)
+        plt.show()
+        '''
+        covid_data.plot_countries2(
+            ['Italy', 'Germany', 'Spain', 'Iran', 'US', 'India', 'Australia', 'United Kingdom', 'South Korea', 'China', 'Japan'],
+            ax3
+        )
+        dpc_covid_data.plot_province_per_regione('Lazio')
+        dpc_covid_data.plot_regioni(['Lazio', 'Lombardia', 'Veneto', 'Emilia Romagna'])
+    
+        if True:
+            covid_data = CssegiCovidData()
+            countries = list(covid_data.countries)'''
