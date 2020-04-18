@@ -1,7 +1,7 @@
 
 //create a drawing context on the canvas
 var $element = document.getElementById("italia_analysis");
-var italia_analysis_ctx = $element.getContext("2d");
+    var italia_analysis_ctx = $element.getContext("2d");
 
 var $element = document.getElementById("roma_analysis");
 var roma_analysis_ctx = $element.getContext("2d");
