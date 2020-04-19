@@ -12,19 +12,11 @@
 <body>
     <div>
     <!--  <canvas> element is used to draw graphics on a web page. -->
-        <div class="sameline">
-            <canvas id="italia_analysis" height="400" ></canvas>
-        </div>
-        <div class="sameline">
-            <canvas id="roma_analysis" height="400"></canvas>
-        </div>
-    </div>
-    <div>
-        <div class="sameline">
+        <div >
             <canvas id="plot_newcases_vs_totalcases" height="400"></canvas>
-        </div>
-        <div class="sameline">
-            <canvas id="plot_newcases_vs_totalcases_regioni" height="400"></canvas>
+        <div >
+        <div >
+            <canvas id="world_map" height="400" ></canvas>
         </div>
     </div>
 
@@ -34,9 +26,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <!-- loading a javascript library for data visualization Charts.js -->
     <!-- local javascript file -->
-    <script src="js/dependencies/Chart.js"></script>
     <script src="js/dependencies/Chart.min.js"></script>
+    <script src="js/dependencies/Chart.Geo.min.js"></script>
     <script src="js/dependencies/palette.js"></script>
+    <script src="js/script.js"></script>
     <script src="js/worldmap.js"></script>
 </body>
 
