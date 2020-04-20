@@ -663,7 +663,7 @@ if __name__ == "__main__":
             json_save=True
         )
         covid_data.plot_newcases_vs_totalcases(
-            ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'], #'all',
+            'all',  # ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
             json_save=True
         )
     else:
