@@ -372,6 +372,7 @@ class CssegiCovidData:
         'Korea, South': 'South Korea',
         'Mainland China': 'China',
         'UK': 'United Kingdom',
+        'US': 'United States of America'
     }
 
     @staticmethod
@@ -662,7 +663,7 @@ if __name__ == "__main__":
             json_save=True
         )
         covid_data.plot_newcases_vs_totalcases(
-            ['Italy', 'Spain', 'Iran', 'US', 'South Korea', 'United Kingdom', 'Japan'], #'all',
+            ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'], #'all',
             json_save=True
         )
     else:
@@ -707,7 +708,7 @@ if __name__ == "__main__":
 
         ax3 = fig.add_axes([border, .5+border+bottom_offset, subplot_size, subplot_size])
         covid_data.plot_newcases_vs_totalcases(
-            ['Italy', 'Spain', 'Iran', 'US', 'South Korea', 'United Kingdom', 'Japan'],
+            ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
             ax3)
         plt.show()
         '''

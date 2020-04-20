@@ -67,15 +67,5 @@ function chartClickEvent(event, array){
       return;
     }
     var active = worldchart.getElementAtEvent(event);
-    console.log(active[0].feature.properties.name)
-}
-
-function removeCountryData(chart, country) {
-    //chart.data.labels.pop();
-    for(removalIndex=0; removalIndex<chart.data.datasets.length; removalIndex++){
-        if (chart.data.datasets[removalIndex].label == country){
-            chart.data.datasets.splice(removalIndex, 1);
-        }
-    }
-    chart.update();
+    toggleCountryData(pnvtr_analysisChart, active[0].feature.properties.name);
 }

@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>World map</title>
-    <!-- loading local stylesheet .css file -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+    <head>
+        <meta charset="UTF-8">
+        <title>World map</title>
+        <!-- loading local stylesheet .css file -->
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
 
-</head>
+    </head>
 
-<body>
-    <div>
-        <div >
-            <canvas id="plot_newcases_vs_totalcases" height="400px"></canvas>
-        <div >
-        <div >
-            <canvas id="world_map" height="400" ></canvas>
+    <body>
+        <div>
+            <div >
+                <canvas id="plot_newcases_vs_totalcases" height="400px"></canvas>
+            </div >
+            <div >
+                <canvas id="world_map" height="100px" ></canvas>
+            </div>
         </div>
-    </div>
 
-    <!-- (best practice to load all the script files at the bottom) -->
+        <!-- (best practice to load all the script files at the bottom) -->
 
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <!-- loading a javascript library for data visualization Charts.js -->
-    <!-- local javascript file -->
-    <script src="js/dependencies/Chart.min.js"></script>
-    <script src="js/dependencies/Chart.Geo.min.js"></script>
-    <script src="js/dependencies/palette.js"></script>
-    <script src="js/plot_newcases_vs_totalcases.js"></script>
-    <script src="js/worldmap.js"></script>
-</body>
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <!-- loading a javascript library for data visualization Charts.js -->
+        <!-- local javascript file -->
+        <script src="js/dependencies/Chart.min.js"></script>
+        <script src="js/dependencies/Chart.Geo.min.js"></script>
+        <script src="js/dependencies/palette.js"></script>
+        <script src="js/plot_newcases_vs_totalcases.js"></script>
+        <script src="js/worldmap.js"></script>
+    </body>
 
 </html>

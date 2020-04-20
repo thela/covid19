@@ -1,34 +1,37 @@
-var $element = document.getElementById("plot_newcases_vs_totalcases");
+
+var $element = document.getElementById("plot_newcases_vs_totalcases"),
+    newcases_vs_totalcases_data,
+    newcases_vs_totalcases_borderColors;
+
 if ($element !== null){
-    var pnvt_ctx = $element.getContext("2d");
-    var pnvt_data = {
-        datasets: []
-    };
+    var pnvt_ctx = $element.getContext("2d"),
+            pnvt_data = {
+            datasets: []
+        },
+        countries;
 
     var jsonData = $.ajax({
         url: 'data/plot_newcases_vs_totalcases.json',
         dataType: 'json',
     }).done(function(jsonData)
     {
-
-        var countries = Object.keys(jsonData).map(function(item) {
+        newcases_vs_totalcases_data = jsonData;
+        countries = Object.keys(newcases_vs_totalcases_data).map(function(item) {
             return item;
         });
-        var borderColors = palette('tol-dv', countries.length).map(function(hex) {
-                return '#' + hex;
-            })
-
+        newcases_vs_totalcases_borderColors = palette('tol-dv', countries.length).map(function(hex) {
+            return '#' + hex;
+        })
 
         for(i=0; i<countries.length; i++){
             pnvt_data['datasets'].push(
                 {
                     label: countries[i],
-                    data: jsonData[countries[i]],
-                    borderColor: borderColors[i],
+                    data: newcases_vs_totalcases_data[countries[i]],
+                    borderColor: newcases_vs_totalcases_borderColors[i],
                     fill: 'false'
                 }
             )
-
         }
         var options = {
             maintainAspectRatio: false,
@@ -70,5 +73,57 @@ if ($element !== null){
             options: options
         });
     });
+
+}
+
+function countryAlreadyPlotted(chart, country) {
+    for(index=0; index<chart.data.datasets.length; index++){
+        if (chart.data.datasets[index].label == country){
+            return index;
+        }
+    }
+    return null;
+}
+
+function getCountryIndex(country) {
+    for(index=0; index<countries.length; index++){
+        if (countries[index] == country){
+            return index;
+        }
+    }
+    return null;
+}
+
+function removeCountryData(chart, country) {
+    for(removalIndex=0; removalIndex<chart.data.datasets.length; removalIndex++){
+        if (chart.data.datasets[removalIndex].label == country){
+            chart.data.datasets.splice(removalIndex, 1);
+        }
+    }
+    chart.update();
+}
+
+function addCountryData(chart, country) {
+    countryIndex = getCountryIndex(country);
+    if (countryAlreadyPlotted(chart, country) == null && countryIndex != null){
+        countryIndex = getCountryIndex(country);
+        chart.data.datasets.push(
+            {
+                label: countries[countryIndex],
+                data: newcases_vs_totalcases_data[countries[countryIndex]],
+                borderColor: newcases_vs_totalcases_borderColors[countryIndex],
+                fill: 'false'
+            }
+        )
+        chart.update();
+    }
+}
+
+function toggleCountryData(chart, country) {
+    if (countryAlreadyPlotted(chart, country) == null){
+        addCountryData(chart, country)
+    } else {
+        removeCountryData(chart, country)
+    }
 
 }
