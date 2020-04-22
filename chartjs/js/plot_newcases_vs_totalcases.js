@@ -1,6 +1,6 @@
 
 var $element = document.getElementById("plot_newcases_vs_totalcases"),
-    shown_countries = ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
+    shown_countries = ['Italy', 'Spain', 'Singapore', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
     newcases_vs_totalcases_data,
     newcases_vs_totalcases_borderColors;
 
