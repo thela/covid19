@@ -659,7 +659,7 @@ if __name__ == "__main__":
         dpc_covid_data.roma_analysis(json_save=True)
         dpc_covid_data.italia_analysis(json_save=True)
         dpc_covid_data.plot_newcases_vs_totalcases_regioni(
-            ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte'], #'all',
+            'all', # ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte']
             json_save=True
         )
         covid_data.plot_newcases_vs_totalcases(
