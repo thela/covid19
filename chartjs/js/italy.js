@@ -40,7 +40,8 @@ if ($element !== null){
                     label: 'regioni',
                     backgroundColor: worldchart_backgroundColor,
                     data: regioni.map((d) => ({feature: d, value: Math.random()})),
-                }]
+                }],
+                outline: regioni,
             },
             options: {
                 showOutline: false,
