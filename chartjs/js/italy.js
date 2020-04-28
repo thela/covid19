@@ -1,5 +1,5 @@
 var shown_regioni = []
-var italy_config= {}, worldchart, worldchart_backgroundColor= [],
+var italy_config= {}, worldchart, italy_backgroundColor= [],
     $element = document.getElementById("italy_map"), italymap_ctx;
 
 if ($element !== null){
@@ -9,26 +9,24 @@ if ($element !== null){
 
         const regioni = ChartGeo.topojson.feature(data,data.objects.ITA_adm1).features;
 
-
-
         var shown;
-        //worldchart_backgroundColor
-        for(country_index=0; country_index<regioni.length; country_index++){
+        //italy_backgroundColor
+        for(regione_index=0; regione_index<regioni.length; regione_index++){
             shown = null;
             for(shown_index=0; shown_index<shown_regioni.length; shown_index++){
-                if (regioni[country_index].properties.name == shown_regioni[shown_index]){
+                if (regioni[regione_index].properties.NAME_1 == shown_regioni[shown_index]){
                     shown = shown_index;
                     break;
                 }
             }
             if( shown === null) {
                 //TODO colour depending on actual ill number
-                worldchart_backgroundColor.push(
+                italy_backgroundColor.push(
                     Color('steelblue').lightness(5 * 100).rgbString()
                 )
             } else {
-                worldchart_backgroundColor.push(
-                    newcases_vs_totalcases_borderColors[shown]
+                italy_backgroundColor.push(
+                    newcases_vs_totalcases_regioni_borderColors[shown]
                 )
             }
         }
@@ -38,10 +36,10 @@ if ($element !== null){
                 labels: regioni.map((d) => d.properties.NAME_1),
                 datasets: [{
                     label: 'regioni',
-                    backgroundColor: worldchart_backgroundColor,
+                    backgroundColor: italy_backgroundColor,
                     data: regioni.map((d) => ({feature: d, value: Math.random()})),
-                }],
                 outline: regioni,
+                }],
             },
             options: {
                 showOutline: false,
@@ -62,7 +60,6 @@ if ($element !== null){
         );
     });
 }
-
 
 function chartClickEvent(event, array){
     //https://stackoverflow.com/questions/46672925/chart-js-onclick-event-with-a-mixed-chart-which-chart-did-i-click
@@ -88,5 +85,16 @@ function chartClickEvent(event, array){
     }
     var active = italychart.getElementAtEvent(event);
     console.log(active[0].feature.properties.NAME_1);
-    toggleCountryData(pnvtr_analysisChart, active[0].feature.properties.NAME_1, active[0]._index);
+    if(active[0].feature.properties.NAME_1==='Sicily'){
+        toggleRegioniData(pnvtr_analysisChart, 'Sicilia', active[0]._index);
+
+    } else if(active[0].feature.properties.NAME_1==='Apulia'){
+        toggleRegioniData(pnvtr_analysisChart, 'Puglia', active[0]._index);
+    } else if(active[0].feature.properties.NAME_1==='Friuli-Venezia Giulia'){
+        toggleRegioniData(pnvtr_analysisChart, 'Friuli Venezia Giulia', active[0]._index);
+    } else if(active[0].feature.properties.NAME_1==='Trentino-Alto Adige'){
+        toggleRegioniData(pnvtr_analysisChart, 'Trentino Alto Adige', active[0]._index);
+    } else {
+        toggleRegioniData(pnvtr_analysisChart, active[0].feature.properties.NAME_1, active[0]._index);
+    }
 }
