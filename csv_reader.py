@@ -135,7 +135,10 @@ class DpcCovidData:
 
             if json_save:
                 data_italia[regione] = {
-                    provincia: {day.__str__(): data_province[day][provincia]['totale_casi'] for day in data_province.keys()}
+                    provincia: [
+                        {
+                            'x': day.__str__(),
+                            'y': data_province[day][provincia]['totale_casi']} for day in data_province.keys()]
                     for provincia in province
                 }
             else:

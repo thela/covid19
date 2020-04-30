@@ -13,30 +13,13 @@ if ($element !== null){
         dataType: 'json',
     }).done(function(jsonData)
     {
-        province_per_regione_data = pprr_processData(jsonData);
+        province_per_regione_data = jsonData
 
         pprr_regioni = Object.keys(jsonData).map(function(item) {
             return item;
         });
-        pprr_borderColors = palette('tol-dv', regioni.length).map(function(hex) {
-                return '#' + hex;
-            })
-        pprr_data = {
-            datasets: []
-        }
-        province = Object.keys(province_per_regione_data[shown_regione]).map(function(item) {
-                    return item;
-                })
-        var i=0;
-        for (var provincia in province_per_regione_data[shown_regione]){
-            pprr_data['datasets'].push({
-                label: provincia,
-                data: province_per_regione_data[shown_regione][provincia],
-                borderColor: pprr_borderColors[i++],
-                fill: 'false'
-            })
 
-        }
+        pprr_data = pprr_italiaProcessData(jsonData, shown_regione);
         var options = {
             maintainAspectRatio: false,
             title: {
@@ -45,21 +28,7 @@ if ($element !== null){
             },
             scales: {
                 xAxes: [{
-                    display: true,
-                    type: 'time',
-                    time: {
-                        parser: 'DD/MM/YYYY HH:mm',
-                        tooltipFormat: 'll HH:mm',
-                        unit: 'day',
-                        unitStepSize: 1,
-                        displayFormats: {
-                            'day': 'DD/MM/YYYY'
-                        }
-                    },
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Giorni'
-                    }
+                    type: 'date',
                 }],
                 yAxes: [{
                     type: 'logarithmic',
@@ -78,57 +47,35 @@ if ($element !== null){
         });
     });
 
-
-    var pprr_processData = function(jsonData) {
-        var locale = "en-us";
-
-
-        pprr_regioni = Object.keys(jsonData).map(function(item) {
-            return item;
-        });
+    var pprr_italiaProcessData = function(jsonData, regione)
+    {
         pprr_borderColors = palette('tol-dv', regioni.length).map(function(hex) {
                 return '#' + hex;
             })
-        var return_data = {
-
+        pprr_data = {
+            datasets: []
         }
         province = Object.keys(province_per_regione_data[shown_regione]).map(function(item) {
                     return item;
                 })
-        for (var regione_index=0; regione_index < prr_regioni.length; regione_index++)){
-            return_data[pprr_regioni[regione_index]] = {}
-            var i=0;
-            for (var provincia in province_per_regione_data[pprr_regioni[regione_index]]){
+        var i=0;
+        for (var provincia in province_per_regione_data[shown_regione]){
+            pprr_data['datasets'].push({
+                label: provincia,
+                data: province_per_regione_data[shown_regione][provincia].map(
+                    function(item) {
+                        return {
+                            'x': new Date(item['x']), //.toISOString().slice(0,10),
+                            'y': item['y']}
+                }),
+                borderColor: pprr_borderColors[i++],
+                fill: 'false'
+            })
 
-                return_data[pprr_regioni[regione_index]][provincia] = province_per_regione_data[shown_regione][provincia];
-
-            }
-
-
-        var x_labels = Object.keys(jsonData).map(function(item) {
-            return new Date(item);
-        }).sort((a, b) => a - b);
-
-        var dataSet = {},
-            isodata = '';
-        for(var i=0; i<roma_analysis_labels.length; i++){
-            // a data set for each label
-            dataSet[roma_analysis_labels[i]] = [];
-
-            for (var j = 0; j < x_labels.length; j++) {
-                dataSet[roma_analysis_labels[i]].push(jsonData[x_labels[j].toISOString().slice(0,10)][roma_analysis_labels[i]])
-            }
         }
+        return pprr_data;
 
-        return {
-            labels: roma_analysis_labels,
-            x_labels: x_labels,
-            data: dataSet,
-            borderColor: roma_analysis_borderColor,
-            backgroundColor: roma_analysis_backgroundColor
-        }
-    };
-
+    }
 }
 
 
