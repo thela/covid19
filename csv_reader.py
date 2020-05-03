@@ -166,6 +166,53 @@ class DpcCovidData:
                 ax.set_xlabel('days')
             ax.legend(plots, plot_label)
 
+    def nuovi_malati_per_regione(self, regioni, ax=None, json_save=False):
+        x_list = list(self.data_province.keys())
+        x_list.sort()
+
+        if regioni == 'all':
+            regioni = self.regioni
+
+        plots = []
+        plot_label = []
+        data_italia = {}
+        for regione in regioni:
+            data_province = self.get_data_province_in_regione(regione)
+            province = list(data_province.values())[0].keys()
+
+            if json_save:
+                data_italia[regione] = {
+                    provincia: [
+                        {
+                            'x': day.__str__(),
+                            'y': data_province[day][provincia]['totale_casi']} for day in data_province.keys()]
+                    for provincia in province
+                }
+            else:
+                for provincia in province:
+                    provincia_data = {day: data_province[day][provincia] for day in data_province.keys()}
+                    for plot_line in ['totale_casi']:
+                        plot_i, = ax.plot_date(x_list, [int(provincia_data[day][plot_line]) for day in x_list], '.-')
+                        plots.append(plot_i)
+                        plot_label.append(
+                            provincia
+                    )
+
+        if json_save:
+            with open('chartjs/data/province_per_regione.json', 'w') as json_fp:
+                json.dump(
+                    data_italia,
+                    fp=json_fp,
+                    default=json_serial
+                )
+        else:
+            if not ax:
+                fig, ax = plt.subplots()
+                fig.autofmt_xdate()
+
+                ax.set_xlabel('days')
+            ax.legend(plots, plot_label)
+
     def plot_regioni(self, regioni):
 
         x_list = list(self.data_regioni.keys())
@@ -684,6 +731,7 @@ if __name__ == "__main__":
             json_save=True
         )
         dpc_covid_data.plot_province_per_regione(regioni='all', json_save=True)
+        dpc_covid_data.nuovi_malati_per_regione(regioni='all', json_save=True)
         covid_data.plot_newcases_vs_totalcases(
             'all',  # ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
             json_save=True
