@@ -199,7 +199,7 @@ class DpcCovidData:
                     )
 
         if json_save:
-            with open('chartjs/data/province_per_regione.json', 'w') as json_fp:
+            with open('chartjs/data/nuovi_malati_per_regione.json', 'w') as json_fp:
                 json.dump(
                     data_italia,
                     fp=json_fp,
