@@ -178,16 +178,21 @@ class DpcCovidData:
         data_italia = {}
         for regione in regioni:
             data_province = self.get_data_province_in_regione(regione)
+            data_italia[regione] = {}
             province = list(data_province.values())[0].keys()
 
             if json_save:
-                data_italia[regione] = {
-                    provincia: [
-                        {
-                            'x': day.__str__(),
-                            'y': data_province[day][provincia]['totale_casi']} for day in data_province.keys()]
-                    for provincia in province
-                }
+                for provincia in province:
+                    data_italia[regione][provincia] = []
+
+                    for day in data_province.keys():
+                        day_before = day - datetime.timedelta(days=1)
+                        if day_before in data_province:
+                            data_italia[regione][provincia].append({
+                                'x': day.__str__(),
+                                'y': int(data_province[day][provincia]['totale_casi']) -
+                                     int(data_province[day_before][provincia][
+                                         'totale_casi'])})
             else:
                 for provincia in province:
                     provincia_data = {day: data_province[day][provincia] for day in data_province.keys()}
