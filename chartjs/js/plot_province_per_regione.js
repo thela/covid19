@@ -1,7 +1,7 @@
 
 var $element = document.getElementById("plot_province_per_regione"),
     shown_regione = 'Lombardia',
-    province_per_regione_data,
+    province_per_regione_data, nuovi_malati_per_regione,
     pprr_borderColors;
 
 if ($element !== null){
@@ -13,9 +13,8 @@ if ($element !== null){
         dataType: 'json',
     }).done(function(jsonData)
     {
-        province_per_regione_data = jsonData
-
-        pprr_regioni = Object.keys(jsonData).map(function(item) {
+        province_per_regione_data = jsonData;
+        pprr_regioni = Object.keys(province_per_regione_data).map(function(item) {
             return item;
         });
 
@@ -50,35 +49,37 @@ if ($element !== null){
             data: pprr_data,
             options: options
         });
+
+        function pprr_italiaProcessData(regione)
+        {
+            pprr_data = {
+                datasets: []
+            }
+            province = Object.keys(province_per_regione_data[regione]).map(function(item) {
+                        return item;
+                    })
+            pprr_borderColors = palette('tol-dv', province.length).map(function(hex) {
+                    return '#' + hex;
+                })
+            var i=0;
+            for (var provincia in province_per_regione_data[regione]){
+                pprr_data['datasets'].push({
+                    label: provincia,
+                    data: province_per_regione_data[regione][provincia].map(
+                        function(item) {
+                            return {
+                                'x': moment(item['x']), //.toISOString().slice(0,10),
+                                'y': item['y']}
+                    }).sort((a, b) => a.x - b.x),
+                    borderColor: pprr_borderColors[i++],
+                    fill: 'false'
+                })
+
+            }
+            return pprr_data;
+
+        }
+
     });
 
-    function pprr_italiaProcessData(regione)
-    {
-        pprr_data = {
-            datasets: []
-        }
-        province = Object.keys(province_per_regione_data[regione]).map(function(item) {
-                    return item;
-                })
-        pprr_borderColors = palette('tol-dv', province.length).map(function(hex) {
-                return '#' + hex;
-            })
-        var i=0;
-        for (var provincia in province_per_regione_data[regione]){
-            pprr_data['datasets'].push({
-                label: provincia,
-                data: province_per_regione_data[regione][provincia].map(
-                    function(item) {
-                        return {
-                            'x': moment(item['x']), //.toISOString().slice(0,10),
-                            'y': item['y']}
-                }).sort((a, b) => a.x - b.x),
-                borderColor: pprr_borderColors[i++],
-                fill: 'false'
-            })
-
-        }
-        return pprr_data;
-
-    }
 }
