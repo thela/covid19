@@ -191,8 +191,8 @@ class DpcCovidData:
                             data_italia[regione][provincia].append({
                                 'x': day.__str__(),
                                 'y': int(data_province[day][provincia]['totale_casi']) -
-                                     int(data_province[day_before][provincia][
-                                         'totale_casi'])})
+                                        int(data_province[day_before][provincia][
+                                            'totale_casi'])})
             else:
                 for provincia in province:
                     provincia_data = {day: data_province[day][provincia] for day in data_province.keys()}
