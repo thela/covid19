@@ -184,9 +184,11 @@ function addRegioniData(chart, regione, italychart_index) {
 function toggleRegioniData(regione, italychart_index) {
     regioneIndex = getRegioneIndex(regione);
 
-
-    pprr_analysisChart.data = pprr_italiaProcessData(regione);
+    pprr_analysisChart.data = pprr_italiaProcessData(regione, province_per_regione_data);
     pprr_analysisChart.update();
+
+    nmpr_analysisChart.data = nmpr_italiaProcessData(regione, nuovi_malati_per_regione);
+    nmpr_analysisChart.update();
     pnvtr_analysisChart.data.datasets = pnvtr_italiaProcessData([regione])
     pnvtr_analysisChart.update()
     if (regioneAlreadyPlotted(pnvtr_analysisChart, regione) == null){
