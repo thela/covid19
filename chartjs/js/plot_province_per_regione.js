@@ -14,6 +14,9 @@ if ($element !== null){
             display: true,
             text: 'Situazione nelle province'
         },
+            legend: {
+                position: 'top'
+            },
         scales: {
             xAxes: [{
                 display: true,
@@ -94,6 +97,9 @@ if ($element !== null){
         title: {
             display: true,
             text: 'Nuovi contagi nelle province'
+        },
+        legend: {
+            position: 'top'
         },
         scales: {
             xAxes: [{

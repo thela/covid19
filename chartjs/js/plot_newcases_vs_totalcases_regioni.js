@@ -1,6 +1,6 @@
 
 var $element = document.getElementById("plot_newcases_vs_totalcases_regioni"),
-    shown_regioni,
+    shown_regioni = ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte'],
     newcases_vs_totalcases_regioni_data,
     newcases_vs_totalcases_regioni_borderColors;
 
@@ -33,7 +33,6 @@ if ($element !== null){
         newcases_vs_totalcases_regioni_borderColors = palette('tol-dv', pnvtr_regioni.length).map(function(hex) {
                 return '#' + hex;
             })
-        shown_regioni = ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte']
         for(i=0; i<shown_regioni.length; i++){
             regione_index = getRegioneIndex(shown_regioni[i]);
             pnvtr_data['datasets'].push(
@@ -51,6 +50,9 @@ if ($element !== null){
             title: {
                 display: true,
                 text: 'Regioni italiane'
+            },
+            legend: {
+                position: 'right'
             },
             scales: {
                 xAxes: [{

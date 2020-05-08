@@ -191,6 +191,25 @@ function toggleRegioniData(regione, italychart_index) {
     nmpr_analysisChart.update();
     pnvtr_analysisChart.data.datasets = pnvtr_italiaProcessData([regione])
     pnvtr_analysisChart.update()
+
+    shown_regioni = [regione]
+
+    for(regione_index=0; regione_index<regioni.length; regione_index++){
+        shown = null;
+        for(shown_index=0; shown_index<shown_regioni.length; shown_index++){
+            if (regioni[regione_index].properties.NAME_1 == shown_regioni[shown_index]){
+                shown = shown_index;
+                break;
+            }
+        }
+        if( shown === null) {
+            italychart.data.datasets[0].backgroundColor[shown_index] = Color('steelblue').lightness(5 * 100).rgbString()
+
+        } else {
+            italychart.data.datasets[0].backgroundColor[shown_index] = newcases_vs_totalcases_regioni_borderColors[shown]
+
+        }
+    }
     if (regioneAlreadyPlotted(pnvtr_analysisChart, regione) == null){
         //addRegioniData(pnvtr_analysisChart, regione, italychart_index)
         // changes colour in world map
