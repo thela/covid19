@@ -120,7 +120,7 @@ if ($element !== null){
         },
     };
     nmpr_analysisChart = new Chart(nmpr_ctx, {
-        type: 'lines',
+        type: 'line',
         data: nmpr_data,
         options: options
     });
@@ -155,7 +155,7 @@ if ($element !== null){
                 data: data[regione][provincia].map(
                     function(item) {
                         return {
-                            'x': moment(item['x']).toISOString().slice(0,10), //.toISOString().slice(0,10),
+                            'x': moment(item['x']),//.toISOString().slice(0,10), //.toISOString().slice(0,10),
                             'y': item['y']}
                 }).sort((a, b) => a.x - b.x),
                 borderColor: nmpr_borderColors[i++],
