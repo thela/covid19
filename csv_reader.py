@@ -513,48 +513,63 @@ class CssegiCovidData:
                             res.append(day_data[country])
             return res
 
-    def plot_countries(self, country):
+    def plot_countries(self, countries, ax=None, json_save=False):
+        if not ax and not json_save:
+            fig, ax = plt.subplots()
+            fig.autofmt_xdate()
 
-        data_dict = self.get_daily_data_by_country(country=country)
-        # ['Italy', 'Mainland China', 'Germany', 'Spain', 'Iran (Islamic Republic of)']
+            ax.set_xlabel('days')
+            # ax.set_xticklabels([x.date() for x in x_list], rotation=45)
 
-        plot_lines = list(self.plot_lines)
-        x_list = list(data_dict.keys())
-        x_list.sort()
+            ax.set_ylabel('individuals')
 
-        fig, ax = plt.subplots()
-        ax.set_xlabel('days')
-        fig.autofmt_xdate()
-        #ax.set_xticklabels([x.date() for x in x_list], rotation=45)
+        if countries == 'all':
+            countries = self.countries
 
-        ax.set_ylabel('individuals')
         plots = []
-        for plot_line in self.plot_lines:
-            plot_i, = ax.plot_date(x_list, [int(data_dict[day][plot_line]) for day in x_list], '.-')
-            plots.append(plot_i)
+        json_data = {}
+        for country in countries:
+            data_dict = self.get_daily_data_by_country(country=country)
 
+            if json_save:
+                json_data[country] = {
+                    'confirmed': [],
+                    'deaths': [],
+                    'recovered': [],
+                }
+                for day in data_dict.keys():
+                    json_data[country]['confirmed'].append({
+                        'x': day.__str__(),
+                        'y': int(data_dict[day]['Confirmed']),
+                    })
+                    json_data[country]['deaths'].append({
+                        'x': day.__str__(),
+                        'y': int(data_dict[day]['Deaths']),
+                    })
+                    json_data[country]['recovered'].append({
+                        'x': day.__str__(),
+                        'y': int(data_dict[day]['Recovered']),
+                    })
+            else:
+                plot_lines = list(self.plot_lines)
+                x_list = list(data_dict.keys())
+                x_list.sort()
 
-        '''plot_i, = ax.plot_date(
-            x, [data_dict[day]['Confirmed']-(data_dict[day]['Deaths']+data_dict[day]['Recovered']) for day in x], '.-')
-        plots.append(plot_i)'''
-        if False:
-            a, b = exp_fit(x_list, [int(data_dict[day]['Confirmed']) for day in x_list], guess_origin=True)
-            plot_i = plot_exp(ax, x_list, a, b)
-            plots.append(plot_i)
-            plot_lines.append('Exp. fit')
+                plot_i, = ax.plot_date(
+                    x_list,
+                    [int(data_dict[day]['Confirmed']) - int(data_dict[day]['Deaths']) - int(data_dict[day]['Recovered']) for day in x_list],
+                    '.-')
+                plots.append(plot_i)
 
-            ax.text(0.12, 0.6, '''a={}
-        b={:.2%}'''.format(a, b),
-                    horizontalalignment='left',
-                    verticalalignment='top',
-                    fontsize=11, color='black',
-                    transform=ax.transAxes)
-
-
-            # a, b = exp_fit(x, [int(data_dict[day]['Deaths']) for day in x], guess_origin=True)
-            # plot_exp(ax, x, a, b)
-        ax.legend(plots, plot_lines)
-        plt.show()
+        if json_save:
+            with open('chartjs/data/plot_countries.json', 'w') as json_fp:
+                json.dump(
+                    json_data,
+                    fp=json_fp,
+                    default=json_serial
+                )
+        else:
+            ax.legend(plots, countries)
 
     def plot_countries2(self, countries, ax=None):
         if not ax:
@@ -741,6 +756,10 @@ if __name__ == "__main__":
             'all',  # ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
             json_save=True
         )
+        covid_data.plot_countries(
+            'all',
+            json_save=True
+        )
     else:
         import matplotlib as mpl
         import matplotlib.pyplot as plt
@@ -782,7 +801,10 @@ if __name__ == "__main__":
             ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte'], ax4)
 
         ax3 = fig.add_axes([border, .5+border+bottom_offset, subplot_size, subplot_size])
-        covid_data.plot_newcases_vs_totalcases(
+        #covid_data.plot_newcases_vs_totalcases(
+        #    ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
+        #    ax3)
+        covid_data.plot_countries2(
             ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
             ax3)
         plt.show()
