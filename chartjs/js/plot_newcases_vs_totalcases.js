@@ -181,5 +181,4 @@ function toggleCountryData(chart, country, worldchart_index) {
     } else {
         removeCountryData(chart, country, worldchart_index)
     }
-
 }
