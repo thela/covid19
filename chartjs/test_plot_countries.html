@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>World map</title>
+        <!-- loading local stylesheet .css file -->
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+
+    </head>
+
+    <body>
+        <div >
+            <canvas id="plot_country" height="400px"></canvas>
+        </div >
+        <!-- (best practice to load all the script files at the bottom) -->
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <!-- loading a javascript library for data visualization Charts.js -->
+        <!-- local javascript file -->
+        <script src="js/dependencies/Chart.min.js"></script>
+        <script src="js/dependencies/Chart.Geo.min.js"></script>
+        <!--
+        <script src="js/dependencies/hammer.min.js"></script>
+        <script src="js/dependencies/chartjs-plugin-zoom.min.js"></script>-->
+        <script src="js/dependencies/palette.js"></script>
+        <script src="js/plot_countries.js"></script>
+    </body>
+
+</html>
