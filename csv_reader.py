@@ -134,6 +134,7 @@ class DpcCovidData:
             province = list(data_province.values())[0].keys()
 
             if json_save:
+                'Forl“-Cesena'
                 data_italia[regione] = {
                     provincia: [
                         {
