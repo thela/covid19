@@ -210,28 +210,26 @@ function toggleRegioniData(regione, italychart_index) {
     shown_regioni = [regione]
 
     var shown;
+    var colour;
     for(regione_index=0; regione_index<regioni.length; regione_index++){
         shown = null;
+        colour = Color('steelblue').lightness(5 * 100).rgbString();
         for(shown_index=0; shown_index<shown_regioni.length; shown_index++){
             if (regioni[regione_index].properties.NAME_1 == shown_regioni[shown_index]){
+                try {
+                    colour = newcases_vs_totalcases_regioni_borderColors[shown]
+                    colour = Color('steelblue').rgbString()
+                } catch(e) {
+                    colour = Color('steelblue').rgbString()
+                }
+
                 shown = regione_index;
                 break;
             }
         }
-        console.log(regioni[regione_index].properties.NAME_1, shown)
-        if( shown === null) {
-            italychart.data.datasets[0].backgroundColor[shown] = Color('steelblue').lightness(5 * 100).rgbString()
-
-        } else {
-            try {
-                italychart.data.datasets[0].backgroundColor[shown] = newcases_vs_totalcases_regioni_borderColors[shown]
-            } catch(e) {
-                italychart.data.datasets[0].backgroundColor[shown] = Color('steelblue').rgbString()
-            }
-
-        }
+        italychart.data.datasets[0].backgroundColor[regione_index] = colour;
     }
-
+    /*
     try{
         if (regioneAlreadyPlotted(pnvtr_analysisChart, regione) == null){
             //addRegioniData(pnvtr_analysisChart, regione, italychart_index)
@@ -245,6 +243,6 @@ function toggleRegioniData(regione, italychart_index) {
             italychart.data.datasets[0].backgroundColor[italychart_index] = Color('steelblue').lightness(5 * 100).rgbString();
 
         }
-    } catch(e){}
+    } catch(e){}*/
     italychart.update();
 }
