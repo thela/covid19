@@ -1,13 +1,13 @@
 var shown_regioni = ['Lombardia']
 var italy_config= {}, worldchart, italy_backgroundColor= [],
-    $element = document.getElementById("italy_map"), italymap_ctx;
+    $element = document.getElementById("italy_map"), italymap_ctx, regioni;
 
 if ($element !== null){
     italymap_ctx = $element.getContext("2d");
     fetch('https://raw.githubusercontent.com/deldersveld/topojson/master/countries/italy/italy-regions.json').then((r) => r.json()).then((data) => {
         //const regioni = ChartGeo.topojson.feature(data, data.objects.countries).features;
 
-        const regioni = ChartGeo.topojson.feature(data,data.objects.ITA_adm1).features;
+        regioni = ChartGeo.topojson.feature(data,data.objects.ITA_adm1).features;
 
         var shown;
         //italy_backgroundColor
@@ -25,9 +25,15 @@ if ($element !== null){
                     Color('steelblue').lightness(5 * 100).rgbString()
                 )
             } else {
-                italy_backgroundColor.push(
-                    newcases_vs_totalcases_regioni_borderColors[shown]
-                )
+                try {
+                    italy_backgroundColor.push(
+                        newcases_vs_totalcases_regioni_borderColors[shown]
+                    )
+                } catch(e) {
+                    italy_backgroundColor.push(
+                        Color('steelblue').rgbString()
+                    )
+                }
             }
         }
         italy_config= {
@@ -69,11 +75,11 @@ function chartClickEvent(event, array){
 
     if (italy_config === 'undefined' || italy_config == null)
     {
-      return;
+      return 'italy_config undefined';
     }
     if (event === 'undefined' || event == null)
     {
-      return;
+      return 'event undefined';
     }
     if (newArr === 'undefined' || newArr == null)
     {
@@ -86,18 +92,20 @@ function chartClickEvent(event, array){
     var active = italychart.getElementAtEvent(event);
     //console.log(active[0].feature.properties.NAME_1);
 
-    var regione_label = active[0].feature.properties.NAME_1;
-    if(active[0].feature.properties.NAME_1==='Sicily'){
-        regione_label = 'Sicilia'
-    } else if(active[0].feature.properties.NAME_1==='Apulia'){
-        regione_label = 'Puglia'
-    } else if(active[0].feature.properties.NAME_1==='Friuli-Venezia Giulia'){
-        regione_label = 'Friuli Venezia Giulia'
-    } else if(active[0].feature.properties.NAME_1==='Trentino-Alto Adige'){
-       regione_label = 'Trentino Alto Adige'
+    if (active.length >0) {
+        var regione_label = active[0].feature.properties.NAME_1;
+        if(active[0].feature.properties.NAME_1==='Sicily'){
+            regione_label = 'Sicilia'
+        } else if(active[0].feature.properties.NAME_1==='Apulia'){
+            regione_label = 'Puglia'
+        } else if(active[0].feature.properties.NAME_1==='Friuli-Venezia Giulia'){
+            regione_label = 'Friuli Venezia Giulia'
+        } else if(active[0].feature.properties.NAME_1==='Trentino-Alto Adige'){
+           regione_label = 'Trentino Alto Adige'
+       }
+       //console.log(regione_label);
+       toggleRegioniData(regione_label, active[0]._index);
    }
-   //console.log(regione_label);
-   toggleRegioniData(regione_label, active[0]._index);
 }
 
 
@@ -182,45 +190,61 @@ function addRegioniData(chart, regione, italychart_index) {
 }
 
 function toggleRegioniData(regione, italychart_index) {
-    regioneIndex = getRegioneIndex(regione);
+    //regioneIndex = getRegioneIndex(regione);
 
-    pprr_analysisChart.data = pprr_italiaProcessData(regione, province_per_regione_data);
-    pprr_analysisChart.update();
+    try{
+        pnvtr_analysisChart.data.datasets = pnvtr_italiaProcessData([regione])
+        pnvtr_analysisChart.update()
+    } catch(e){}
 
-    nmpr_analysisChart.data = nmpr_italiaProcessData(regione, nuovi_malati_per_regione);
-    nmpr_analysisChart.update();
-    pnvtr_analysisChart.data.datasets = pnvtr_italiaProcessData([regione])
-    pnvtr_analysisChart.update()
+    try{
+        pprr_analysisChart.data = pprr_italiaProcessData(regione, province_per_regione_data);
+        pprr_analysisChart.update();
+    } catch(e){}
+
+    try{
+        nmpr_analysisChart.data = nmpr_italiaProcessData(regione, nuovi_malati_per_regione);
+        nmpr_analysisChart.update();
+    } catch(e){}
 
     shown_regioni = [regione]
 
+    var shown;
     for(regione_index=0; regione_index<regioni.length; regione_index++){
         shown = null;
         for(shown_index=0; shown_index<shown_regioni.length; shown_index++){
             if (regioni[regione_index].properties.NAME_1 == shown_regioni[shown_index]){
-                shown = shown_index;
+                shown = regione_index;
                 break;
             }
         }
+        console.log(regioni[regione_index].properties.NAME_1, shown)
         if( shown === null) {
-            italychart.data.datasets[0].backgroundColor[shown_index] = Color('steelblue').lightness(5 * 100).rgbString()
+            italychart.data.datasets[0].backgroundColor[shown] = Color('steelblue').lightness(5 * 100).rgbString()
 
         } else {
-            italychart.data.datasets[0].backgroundColor[shown_index] = newcases_vs_totalcases_regioni_borderColors[shown]
+            try {
+                italychart.data.datasets[0].backgroundColor[shown] = newcases_vs_totalcases_regioni_borderColors[shown]
+            } catch(e) {
+                italychart.data.datasets[0].backgroundColor[shown] = Color('steelblue').rgbString()
+            }
 
         }
     }
-    if (regioneAlreadyPlotted(pnvtr_analysisChart, regione) == null){
-        //addRegioniData(pnvtr_analysisChart, regione, italychart_index)
-        // changes colour in world map
-        italychart.data.datasets[0].backgroundColor[italychart_index] = newcases_vs_totalcases_regioni_borderColors[shown_index];
 
-    } else {
-        //removeRegioniData(pnvtr_analysisChart, regione, italychart_index)
+    try{
+        if (regioneAlreadyPlotted(pnvtr_analysisChart, regione) == null){
+            //addRegioniData(pnvtr_analysisChart, regione, italychart_index)
+            // changes colour in world map
+            italychart.data.datasets[0].backgroundColor[italychart_index] = newcases_vs_totalcases_regioni_borderColors[shown_index];
 
-        // changes colour in world map
-        italychart.data.datasets[0].backgroundColor[italychart_index] = Color('steelblue').lightness(5 * 100).rgbString();
+        } else {
+            //removeRegioniData(pnvtr_analysisChart, regione, italychart_index)
 
-    }
+            // changes colour in world map
+            italychart.data.datasets[0].backgroundColor[italychart_index] = Color('steelblue').lightness(5 * 100).rgbString();
+
+        }
+    } catch(e){}
     italychart.update();
 }

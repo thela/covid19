@@ -3,7 +3,6 @@ import datetime
 import json
 import os
 import numpy as np
-import random
 
 start_date = datetime.datetime(2020, 2, 24)
 
