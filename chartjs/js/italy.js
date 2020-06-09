@@ -189,25 +189,25 @@ function addRegioniData(chart, regione, italychart_index) {
     }
 }
 
-function toggleRegioniData(regione, italychart_index) {
+function toggleRegioniData(regione_label, italychart_index) {
     //regioneIndex = getRegioneIndex(regione);
 
     try{
-        pnvtr_analysisChart.data.datasets = pnvtr_italiaProcessData([regione])
+        pnvtr_analysisChart.data.datasets = pnvtr_italiaProcessData([regione_label])
         pnvtr_analysisChart.update()
     } catch(e){}
 
     try{
-        pprr_analysisChart.data = pprr_italiaProcessData(regione, province_per_regione_data);
+        pprr_analysisChart.data = pprr_italiaProcessData(regione_label, province_per_regione_data);
         pprr_analysisChart.update();
     } catch(e){}
 
     try{
-        nmpr_analysisChart.data = nmpr_italiaProcessData(regione, nuovi_malati_per_regione);
+        nmpr_analysisChart.data = nmpr_italiaProcessData(regione_label, nuovi_malati_per_regione);
         nmpr_analysisChart.update();
     } catch(e){}
 
-    shown_regioni = [regione]
+    shown_regioni = [regione_label]
 
     var shown;
     var colour;
