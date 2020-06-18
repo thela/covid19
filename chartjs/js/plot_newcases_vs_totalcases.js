@@ -41,6 +41,10 @@ if ($element !== null){
             elements: {
                 line: {
                     tension: 0.000001
+                },
+
+                point:{
+                    radius: 0
                 }
             },
             title: {

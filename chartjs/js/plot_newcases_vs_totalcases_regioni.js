@@ -47,6 +47,15 @@ if ($element !== null){
 
         var options = {
             maintainAspectRatio: false,
+            elements: {
+                line: {
+                    tension: 0.000001
+                },
+
+                point:{
+                    radius: 0
+                }
+            },
             title: {
                 display: true,
                 text: 'Regioni italiane'
