@@ -4,6 +4,9 @@ import json
 import os
 import numpy as np
 
+dpc_folder = os.path.expanduser('~/Documents/sources/dpc/COVID-19')
+cssegi_folder = os.path.expanduser('~/Documents/sources/CSSEGI/COVID-19')
+
 start_date = datetime.datetime(2020, 2, 24)
 
 
@@ -13,17 +16,17 @@ def json_serial(obj):
 
 
 class DpcCovidData:
-    data_json_regioni = 'dpc/COVID-19/dati-json/dpc-covid19-ita-regioni.json'
-    dati_regioni_folder = 'dpc/COVID-19/dati-regioni/'
+    data_json_regioni = os.path.join(dpc_folder, 'dati-json/dpc-covid19-ita-regioni.json')
+    dati_regioni_folder = os.path.join(dpc_folder, 'dati-regioni/')
 
     dati_province_labels = [
         'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati', 'isolamento_domiciliare',
         'totale_positivi', 'variazione_totale_positivi', 'dimessi_guariti', 'deceduti', 'totale_casi',
         'tamponi'
     ]
-    dati_province_folder = 'dpc/COVID-19/dati-province/'
+    dati_province_folder = os.path.join(dpc_folder, 'dati-province/')
 
-    dati_nazionale_folder = 'dpc/COVID-19/dati-andamento-nazionale/'
+    dati_nazionale_folder = os.path.join(dpc_folder, 'dati-andamento-nazionale/')
 
     def get_data_nazionale(self):
         data_nazionale = {}
@@ -438,7 +441,7 @@ class DpcCovidData:
 
 
 class CssegiCovidData:
-    cssegi_daily_reports_folder = 'CSSEGI/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/'
+    cssegi_daily_reports_folder = os.path.join(cssegi_folder, 'csse_covid_19_data/csse_covid_19_daily_reports/')
     plot_lines = ['Confirmed', 'Deaths', 'Recovered']
 
     replacements = {
