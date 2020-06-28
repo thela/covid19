@@ -136,14 +136,30 @@ class DpcCovidData:
             province = list(data_province.values())[0].keys()
 
             if json_save:
-                'Forl“-Cesena'
-                data_italia[regione] = {
+                data_italia[regione] = {}
+                '''if provincia in ['In fase di definizione', 'fuori Regione/P.A.']:
+                    provincia_regione = 'In fase di definizione/aggiornamento'
+                else:
+                    provincia_regione = provincia'''
+
+                for day in data_province.keys():
+                    for provincia in data_province[day]:
+                        if provincia not in data_italia[regione]:
+                            data_italia[regione][provincia] = []
+                        data_italia[regione][provincia].append(
+                            {
+                                'x': day.__str__(),
+                                'y': data_province[day][provincia]['totale_casi']}
+
+                        )
+
+                '''data_italia[regione] = {
                     provincia: [
                         {
                             'x': day.__str__(),
                             'y': data_province[day][provincia]['totale_casi']} for day in data_province.keys()]
                     for provincia in province
-                }
+                }'''
             else:
                 for provincia in province:
                     provincia_data = {day: data_province[day][provincia] for day in data_province.keys()}
@@ -185,12 +201,15 @@ class DpcCovidData:
             province = list(data_province.values())[0].keys()
 
             if json_save:
-                for provincia in province:
-                    data_italia[regione][provincia] = []
 
-                    for day in data_province.keys():
-                        day_before = day - datetime.timedelta(days=1)
-                        if day_before in data_province:
+                for day in data_province.keys():
+                    day_before = day - datetime.timedelta(days=1)
+
+                    for provincia in data_province[day]:
+                        if provincia not in data_italia[regione]:
+                            data_italia[regione][provincia] = []
+
+                        if day_before in data_province and provincia in data_province[day_before]:
                             data_italia[regione][provincia].append({
                                 'x': day.__str__(),
                                 'y': int(data_province[day][provincia]['totale_casi']) -
