@@ -118,11 +118,36 @@ if ($element !== null){
                 }
             }]
         },
+
+        plugins: {
+            zoom: {
+                // Container for pan options
+                pan: {
+                    // Boolean to enable panning
+                    enabled: true,
+
+                    // Panning directions. Remove the appropriate direction to disable
+                    // Eg. 'y' would only allow panning in the y direction
+                    mode: 'x'
+                },
+
+                // Container for zoom options
+                zoom: {
+                    // Boolean to enable zooming
+                    enabled: true,
+
+                    // Zooming directions. Remove the appropriate direction to disable
+                    // Eg. 'y' would only allow zooming in the y direction
+                    mode: 'xy',
+                }
+            }
+        }
+
     };
     nmpr_analysisChart = new Chart(nmpr_ctx, {
         type: 'line',
         data: nmpr_data,
-        options: options
+        options: options,
     });
 
     $.getJSON('data/nuovi_malati_per_regione.json', function(data) {
@@ -165,4 +190,8 @@ if ($element !== null){
         }
         return nmpr_data;
     }
+}
+
+function nmpr_resetZoom() {
+    nmpr_analysisChart.resetZoom();
 }

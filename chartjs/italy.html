@@ -30,6 +30,9 @@
             <div class="sameline">
                 <p style="height: 100%; width:80%;">
                     <canvas id="nuovi_malati_per_regione" height="400"></canvas>
+                    <div style="width:75%;">
+                        <button onclick="nmpr_resetZoom()">Reset Zoom</button>
+                    </div>
                 </p>
              </div>
 
@@ -42,9 +45,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
         <script src="js/dependencies/Chart.min.js"></script>
         <script src="js/dependencies/Chart.Geo.min.js"></script>
-        <!--
         <script src="js/dependencies/hammer.min.js"></script>
-        <script src="js/dependencies/chartjs-plugin-zoom.min.js"></script>-->
+        <script src="js/dependencies/chartjs-plugin-zoom.min.js"></script>
         <script src="js/dependencies/palette.js"></script>
         <script src="js/plot_newcases_vs_totalcases_regioni.js"></script>
         <script src="js/plot_province_per_regione.js"></script>
