@@ -579,7 +579,8 @@ class CssegiCovidData:
 
                 plot_i, = ax.plot_date(
                     x_list,
-                    [int(data_dict[day]['Confirmed']) - int(data_dict[day]['Deaths']) - int(data_dict[day]['Recovered']) for day in x_list],
+                    [int(data_dict[day]['Confirmed']) - int(data_dict[day]['Deaths']) - int(data_dict[day]['Recovered'])
+                     for day in x_list],
                     '.-')
                 plots.append(plot_i)
 

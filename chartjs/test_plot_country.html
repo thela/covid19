@@ -13,19 +13,26 @@
         <div >
             <canvas id="plot_country" height="400px"></canvas>
         </div >
+        <div >
+            <canvas id="world_map" height="100px" ></canvas>
+        </div>
         <!-- (best practice to load all the script files at the bottom) -->
 
         <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <!-- loading a javascript library for data visualization Charts.js -->
         <!-- local javascript file -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
         <script src="js/dependencies/Chart.min.js"></script>
         <script src="js/dependencies/Chart.Geo.min.js"></script>
-        <!--
+
+
         <script src="js/dependencies/hammer.min.js"></script>
-        <script src="js/dependencies/chartjs-plugin-zoom.min.js"></script>-->
+        <script src="js/dependencies/chartjs-plugin-zoom.min.js"></script>
+
         <script src="js/dependencies/palette.js"></script>
-        <script src="js/plot_countries.js"></script>
+        <script src="js/worldmap_singlecountry.js"></script>
+        <script src="js/plot_country.js"></script>
     </body>
 
 </html>
