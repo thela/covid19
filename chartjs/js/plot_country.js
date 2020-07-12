@@ -65,26 +65,27 @@ if ($element !== null){
     })
 
 
-    function pc_ProcessData(country, data)
-    {
-        pc_data = {
-            datasets: []
-        }
-        for (const type of ['confirmed', 'deaths', 'recovered']){
-            pc_data['datasets'].push({
-                label: type,
-                data: data[country][type].map(
-                    function(item) {
-                        return {
-                            'x': moment(item['x']), //.toISOString().slice(0,10),
-                            'y': item['y']}
-                }).sort((a, b) => a.x - b.x),
-                borderColor: pc_borderColors[type],
-                fill: 'false'
-            })
+}
 
-        }
-
-        return pc_data;
+function pc_ProcessData(country, data)
+{
+    pc_data = {
+        datasets: []
     }
+    for (const type of ['confirmed', 'deaths', 'recovered']){
+        pc_data['datasets'].push({
+            label: type,
+            data: data[country][type].map(
+                function(item) {
+                    return {
+                        'x': moment(item['x']), //.toISOString().slice(0,10),
+                        'y': item['y']}
+            }).sort((a, b) => a.x - b.x),
+            borderColor: pc_borderColors[type],
+            fill: 'false'
+        })
+
+    }
+
+    return pc_data;
 }

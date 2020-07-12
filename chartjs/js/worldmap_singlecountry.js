@@ -1,6 +1,8 @@
 
 var worldmap_config= {}, worldchart, worldchart_backgroundColor= [],
-    $element = document.getElementById("world_map"), worldmap_ctx;
+    $element = document.getElementById("world_map_single"), worldmap_ctx,
+    selected_colour=Color('steelblue').rgbString(),
+    other_colour=Color('steelblue').lightness(5 * 100).rgbString();
 
 if ($element !== null){
     worldmap_ctx = $element.getContext("2d");
@@ -11,23 +13,18 @@ if ($element !== null){
         //worldchart_backgroundColor
         for(country_index=0; country_index<countries.length; country_index++){
             shown = null;
-            for(shown_index=0; shown_index<shown_countries.length; shown_index++){
-                if (countries[country_index].properties.name == shown_countries[shown_index]){
-                    shown = shown_index;
-                    break;
-                }
-            }
-            if( shown === null) {
+            if (countries[country_index].properties.name == shown_country){
                 //TODO colour depending on actual ill number
                 worldchart_backgroundColor.push(
-                    Color('steelblue').lightness(5 * 100).rgbString()
+                    selected_colour
                 )
             } else {
                 worldchart_backgroundColor.push(
-                    newcases_vs_totalcases_borderColors[shown]
+                    other_colour
                 )
             }
         }
+
         worldmap_config= {
             type: 'choropleth',
             data: {
@@ -83,7 +80,7 @@ if ($element !== null){
                         threshold: 10,
 
                         // Function called while the user is panning
-                        onPan: function({chart}) { console.log(`I'm panning!!!`); },
+                        onPan: function({chart}) { console.log("I'm panning!!!"); },
                         // Function called once panning is completed
                         onPanComplete: function({chart}) { console.log(`I was panned!!!`); }
                     },
@@ -132,7 +129,7 @@ if ($element !== null){
                         sensitivity: 3,
 
                         // Function called while the user is zooming
-                        onZoom: function({chart}) { console.log(`I'm zooming!!!`); },
+                        onZoom: function({chart}) { console.log("I'm zooming!!!"); },
                         // Function called once zooming is completed
                         onZoomComplete: function({chart}) { console.log(`I was zoomed!!!`); }
                     }
@@ -171,5 +168,18 @@ function chartClickEvent(event, array){
       return;
     }
     var active = worldchart.getElementAtEvent(event);
-    toggleCountryData(pnvtr_analysisChart, active[0].feature.properties.name, active[0]._index);
+    setCountryData(pc_analysisChart, active[0].feature.properties.name, active[0]._index);
+    pc_analysisChart.data = pc_ProcessData(shown_country, countries_data);
+    pc_analysisChart.update();
+}
+
+function setCountryData(chart, country, worldchart_index) {
+    worldchart_backgroundColor[worldchart_index] = selected_colour;
+    worldchart_backgroundColor[
+        worldchart.data['labels'].findIndex(country => country === shown_country)
+    ] = other_colour;
+    shown_country = country;
+    worldchart.update();
+
+
 }
