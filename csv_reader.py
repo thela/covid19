@@ -185,6 +185,34 @@ class DpcCovidData:
                 ax.set_xlabel('days')
             ax.legend(plots, plot_label)
 
+    def save_data_regioni(self, regioni):
+
+        if regioni == 'all':
+            regioni = self.regioni
+
+        data_italia = {}
+        for regione in regioni:
+            data_regione = self.get_regione(regione)
+            data_italia[regione] = {}
+
+            for day in data_regione.keys():
+                for number_type in data_regione[day]:
+                    if number_type not in data_italia[regione]:
+                        data_italia[regione][number_type] = []
+                    data_italia[regione][number_type].append(
+                        {
+                            'x': day.__str__(),
+                            'y': data_regione[day][number_type]}
+
+                    )
+
+        with open('chartjs/data/data_regione.json', 'w') as json_fp:
+            json.dump(
+                data_italia,
+                fp=json_fp,
+                default=json_serial
+            )
+
     def nuovi_malati_per_regione(self, regioni, ax=None, json_save=False):
         x_list = list(self.data_province.keys())
         x_list.sort()
@@ -775,6 +803,7 @@ if __name__ == "__main__":
         )
         dpc_covid_data.plot_province_per_regione(regioni='all', json_save=True)
         dpc_covid_data.nuovi_malati_per_regione(regioni='all', json_save=True)
+        dpc_covid_data.save_data_regioni(regioni='all')
         covid_data.plot_newcases_vs_totalcases(
             'all',  # ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
             json_save=True

@@ -198,6 +198,12 @@ function toggleRegioniData(regione_label, italychart_index) {
     } catch(e){}
 
     try{
+        r_analysisChart.data = r_italiaProcessData(regione_label, regioni_data);
+        r_analysisChart.options.title.text = shown_regione;
+        r_analysisChart.update();
+    } catch(e){}
+
+    try{
         pprr_analysisChart.data = pprr_italiaProcessData(regione_label, province_per_regione_data);
         pprr_analysisChart.update();
     } catch(e){}

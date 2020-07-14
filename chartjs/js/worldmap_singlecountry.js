@@ -170,6 +170,8 @@ function chartClickEvent(event, array){
     var active = worldchart.getElementAtEvent(event);
     setCountryData(pc_analysisChart, active[0].feature.properties.name, active[0]._index);
     pc_analysisChart.data = pc_ProcessData(shown_country, countries_data);
+
+    pc_analysisChart.options.title.text = shown_country;
     pc_analysisChart.update();
 }
 
@@ -180,6 +182,5 @@ function setCountryData(chart, country, worldchart_index) {
     ] = other_colour;
     shown_country = country;
     worldchart.update();
-
 
 }
