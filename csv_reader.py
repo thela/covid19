@@ -54,6 +54,24 @@ class DpcCovidData:
         return data_nazionale
 
     def get_data_regioni(self):
+        """
+
+        'ricoverati_con_sintomi': dato,
+        'terapia_intensiva': dato,
+        'totale_ospedalizzati': ricoverati_con_sintomi + terapia_intensiva,
+        'isolamento_domiciliare': dato,
+        'totale_positivi': totale_ospedalizzati + isolamento_domiciliare,
+        'variazione_totale_positivi': totale_positivi(day) - totale_positivi(day-1),
+        'nuovi_positivi': dato,
+        'dimessi_guariti': dato,
+        'deceduti': dato,
+        'casi_da_sospetto_diagnostico': dato,
+        'casi_da_screening': dato,
+        'totale_casi': totale_positivi + dimessi_guariti + deceduti,
+        'tamponi': dato,
+        'casi_testati': dato,
+        :return:
+        """
         data_regioni = {}
         regioni = set()
         for daily_filename in os.listdir(self.dati_regioni_folder):

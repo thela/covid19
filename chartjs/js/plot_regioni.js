@@ -2,7 +2,23 @@
 var $element = document.getElementById("plot_regioni"),
     regioni_data, nuovi_malati_per_regione,
     r_borderColors, r_regioni,
-    axis_per_type = {
+    type_to_plot = ['terapia_intensiva', 'ricoverati_con_sintomi', 'isolamento_domiciliare', 'dimessi_guariti', 'deceduti' ],
+    color_per_type = {
+        'ricoverati_con_sintomi': '#ff7f7f',
+        'terapia_intensiva': '#ff3232',
+        'totale_ospedalizzati': 'A',
+        'isolamento_domiciliare': '#ffc059',
+        'totale_positivi': 'A',
+        'variazione_totale_positivi': 'A',
+        'nuovi_positivi': 'A',
+        'dimessi_guariti': '#7fe9ff',
+        'deceduti': '#0094b2',
+        'casi_da_sospetto_diagnostico': 'A',
+        'casi_da_screening': 'A',
+        'totale_casi': 'A',
+        'tamponi': 'B',
+        'casi_testati': 'A',
+    }, axis_per_type = {
         'ricoverati_con_sintomi': 'A',
         'terapia_intensiva': 'A',
         'totale_ospedalizzati': 'A',
@@ -39,6 +55,7 @@ if ($element !== null){
 
     var options = {
         maintainAspectRatio: false,
+        spanGaps: false,
         title: {
             display: true,
             text: 'Situazione nelle province'
@@ -58,19 +75,50 @@ if ($element !== null){
             yAxes: [{
                 id: 'A',
                 type: 'linear',
+                stacked: true,
                 scaleLabel: {
                     display: true,
                 }
             },
-            {
+            /*{
                 id: 'B',
                 type: 'logarithmic',
                 scaleLabel: {
                     display: true,
                 }
-            }
+            }*/
             ]
         },
+
+        plugins: {
+            filler: {
+                propagate: false
+            },
+            'samples-filler-analyser': {
+                target: 'chart-analyser'
+            },
+            zoom: {
+                // Container for pan options
+                pan: {
+                    // Boolean to enable panning
+                    enabled: true,
+
+                    // Panning directions. Remove the appropriate direction to disable
+                    // Eg. 'y' would only allow panning in the y direction
+                    mode: 'x'
+                },
+
+                // Container for zoom options
+                zoom: {
+                    // Boolean to enable zooming
+                    enabled: true,
+
+                    // Zooming directions. Remove the appropriate direction to disable
+                    // Eg. 'y' would only allow zooming in the y direction
+                    mode: 'x',
+                }
+            }
+        }
     };
     r_analysisChart = new Chart(r_ctx, {
         type: 'line',
@@ -100,11 +148,9 @@ if ($element !== null){
                     return item;
                 })
 
-        r_borderColors = palette('tol-dv', number_type.length).map(function(hex) {
-                return '#' + hex;
-            })
         var i=0;
-        for (var number_type in data[regione]){
+        for (var type_index in type_to_plot){
+            number_type = type_to_plot[type_index]
             r_data['datasets'].push({
                 label: number_type,
                 data: data[regione][number_type].map(
@@ -113,7 +159,7 @@ if ($element !== null){
                             'x': moment(item['x']), //.toISOString().slice(0,10),
                             'y': item['y']}
                 }).sort((a, b) => a.x - b.x),
-                borderColor: r_borderColors[i++],
+                borderColor: color_per_type[number_type],
                 fill: 'false',
                 yAxisID: axis_per_type[number_type],
                 type: chart_per_type[number_type]

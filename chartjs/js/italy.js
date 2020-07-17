@@ -199,7 +199,7 @@ function toggleRegioniData(regione_label, italychart_index) {
 
     try{
         r_analysisChart.data = r_italiaProcessData(regione_label, regioni_data);
-        r_analysisChart.options.title.text = shown_regione;
+        r_analysisChart.options.title.text = regione_label;
         r_analysisChart.update();
     } catch(e){}
 
