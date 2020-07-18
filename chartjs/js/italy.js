@@ -213,6 +213,13 @@ function toggleRegioniData(regione_label, italychart_index) {
         nmpr_analysisChart.update();
     } catch(e){}
 
+
+    try{
+        t_analysisChart.data = t_ProcessData(regione_label, tamponi_data);
+        t_analysisChart.options.title.text = regione_label;
+        t_analysisChart.update();
+    } catch(e){}
+
     shown_regioni = [regione_label]
 
     var shown;

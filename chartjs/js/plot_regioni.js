@@ -1,6 +1,6 @@
 
 var $element = document.getElementById("plot_regioni"),
-    regioni_data, nuovi_malati_per_regione,
+    regioni_data,
     r_borderColors, r_regioni,
     type_to_plot = ['terapia_intensiva', 'ricoverati_con_sintomi', 'isolamento_domiciliare', 'dimessi_guariti', 'deceduti' ],
     color_per_type = {
@@ -58,7 +58,6 @@ if ($element !== null){
         spanGaps: false,
         title: {
             display: true,
-            text: 'Situazione nelle province'
         },
             legend: {
                 position: 'top'

@@ -1,7 +1,7 @@
 
 var $element = document.getElementById("plot_province_per_regione"),
     shown_regione = 'Lombardia',
-    province_per_regione_data, nuovi_malati_per_regione,
+    province_per_regione_data,
     pprr_borderColors;
 
 if ($element !== null){
@@ -156,7 +156,7 @@ if ($element !== null){
             return item;
         });
 
-        nmpr_data = pprr_italiaProcessData(shown_regione, nuovi_malati_per_regione);
+        nmpr_data = nmpr_italiaProcessData(shown_regione, nuovi_malati_per_regione);
         nmpr_analysisChart.data = nmpr_data;
         nmpr_analysisChart.update();
 
@@ -190,8 +190,4 @@ if ($element !== null){
         }
         return nmpr_data;
     }
-}
-
-function nmpr_resetZoom() {
-    nmpr_analysisChart.resetZoom();
 }

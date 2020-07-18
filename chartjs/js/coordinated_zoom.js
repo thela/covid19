@@ -4,8 +4,8 @@ var rightEnd;
 
 var charts = [
     r_analysisChart,
-    nmpr_analysisChart,
-    pprr_analysisChart
+    t_analysisChart,
+    nmpr_analysisChart
 ];
 
 
