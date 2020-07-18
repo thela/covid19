@@ -231,6 +231,61 @@ class DpcCovidData:
                 default=json_serial
             )
 
+    def tamponi_data(self, regioni):
+
+        if regioni == 'all':
+            regioni = self.regioni
+
+        data_italia = {}
+        for regione in regioni:
+            data_regione = self.get_regione(regione)
+            data_italia[regione] = {
+                'tamponi': [],
+                'nuovi_casi': [],
+                'percentuale_positivi': []
+            }
+
+            nuovi_tamponi_dict = {}
+            for day in (regione_tamponi := {day: data_regione[day]['tamponi'] for day in data_regione.keys()}):
+                nuovi_tamponi = int(regione_tamponi[day])
+                day_before = day - datetime.timedelta(days=1)
+
+                if day_before in regione_tamponi:
+                    nuovi_tamponi -= int(regione_tamponi[day_before])
+
+                data_italia[regione]['tamponi'].append({
+                        'x': day.__str__(),
+                        'y': nuovi_tamponi
+                })
+                nuovi_tamponi_dict[day.__str__()] = nuovi_tamponi
+
+            for day in (regione_malati := {day: data_regione[day]['totale_casi'] for day in data_regione.keys()}):
+                nuovi_casi = int(regione_malati[day])
+                day_before = day - datetime.timedelta(days=1)
+
+                if day_before in regione_malati:
+                    nuovi_casi -= int(regione_malati[day_before])
+
+                data_italia[regione]['nuovi_casi'].append({
+                    'x': day.__str__(),
+                    'y': nuovi_casi
+                })
+
+            for day_data in data_italia[regione]['nuovi_casi']:
+                day = day_data['x']
+                nuovi_casi = day_data['y']
+                data_italia[regione]['percentuale_positivi'].append({
+                    'x': day,
+                    'y': nuovi_casi/nuovi_tamponi_dict[day] if nuovi_tamponi_dict[day] != 0 else 0
+                })
+
+        with open('chartjs/data/data_tamponi.json', 'w') as json_fp:
+            json.dump(
+                data_italia,
+                fp=json_fp,
+                default=json_serial
+            )
+
     def nuovi_malati_per_regione(self, regioni, ax=None, json_save=False):
         x_list = list(self.data_province.keys())
         x_list.sort()
@@ -822,6 +877,7 @@ if __name__ == "__main__":
         dpc_covid_data.plot_province_per_regione(regioni='all', json_save=True)
         dpc_covid_data.nuovi_malati_per_regione(regioni='all', json_save=True)
         dpc_covid_data.save_data_regioni(regioni='all')
+        dpc_covid_data.tamponi_data(regioni='all')
         covid_data.plot_newcases_vs_totalcases(
             'all',  # ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
             json_save=True

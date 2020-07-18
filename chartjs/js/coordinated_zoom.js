@@ -11,8 +11,10 @@ var charts = [
 
 function updateChart() {
     Chart.helpers.each(charts, function (instance) {
-        instance.options.scales.xAxes[0].time.min = leftEnd;
-        instance.options.scales.xAxes[0].time.max = rightEnd;
+        //instance.options.scales.xAxes[0].time.min = leftEnd;
+        //instance.options.scales.xAxes[0].time.max = rightEnd;
+        instance.options.scales.xAxes[0].ticks.min = leftEnd;
+        instance.options.scales.xAxes[0].ticks.max = rightEnd;
         instance.update();
     });
 }
@@ -35,7 +37,7 @@ for (const chart of charts) {
             enabled: true,
             mode: 'x',
             onPan: function() {
-                console.log("PAN");
+                //console.log("PAN");
                 leftEnd = chart.getDatasetMeta(1).dataset._scale.chart.scales['x-axis-0']._table[0].time;
                 rightEnd = chart.getDatasetMeta(1).dataset._scale.chart.scales['x-axis-0']._table[1].time;
 
@@ -54,31 +56,7 @@ for (const chart of charts) {
             }
         }
     }
+    chart.options.animation = {
+        duration: 0
+    }
 }
-/*
-        pan: {
-          enabled: true,
-          mode: 'x',
-          onPan: function() {
-            console.log("PAN");
-            leftEnd = myChartB.getDatasetMeta(1).dataset._scale.chart.scales['x-axis-0']._table[0].time;
-            rightEnd = myChartB.getDatasetMeta(1).dataset._scale.chart.scales['x-axis-0']._table[1].time;
-
-
-            updateChart();
-          }
-        },
-        zoom: {
-          enabled: true,
-          mode: 'x',
-          onZoom: function() {
-            leftEnd = myChartB.getDatasetMeta(0).dataset._scale.chart.scales['x-axis-0']._table[0].time;
-            rightEnd = myChartB.getDatasetMeta(0).dataset._scale.chart.scales['x-axis-0']._table[1].time;
-
-
-            updateChart();
-          }
-        }
-      }
-    },
-    */
