@@ -49,6 +49,10 @@ if ($element !== null){
                 {
                     id: 'B',
                     type: 'linear',
+                    ticks: {
+                        min: 0,
+                        max: 1
+                    },
                     scaleLabel: {
                         display: true,
                     }

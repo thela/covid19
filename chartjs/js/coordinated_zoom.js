@@ -15,6 +15,7 @@ function updateChart() {
         //instance.options.scales.xAxes[0].time.max = rightEnd;
         instance.options.scales.xAxes[0].ticks.min = leftEnd;
         instance.options.scales.xAxes[0].ticks.max = rightEnd;
+
         instance.update();
     });
 }
