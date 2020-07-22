@@ -161,7 +161,8 @@ if ($element !== null){
                 borderColor: color_per_type[number_type],
                 fill: 'false',
                 yAxisID: axis_per_type[number_type],
-                type: chart_per_type[number_type]
+                type: chart_per_type[number_type],
+                lineTension: 0,
             })
 
         }

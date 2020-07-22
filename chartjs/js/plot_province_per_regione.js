@@ -184,7 +184,8 @@ if ($element !== null){
                             'y': item['y']}
                 }).sort((a, b) => a.x - b.x),
                 borderColor: nmpr_borderColors[i++],
-                fill: 'false'
+                fill: 'false',
+                lineTension: 0
             })
     
         }

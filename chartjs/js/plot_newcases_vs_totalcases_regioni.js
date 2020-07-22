@@ -102,7 +102,8 @@ if ($element !== null){
                     label: pnvtr_regioni[regione_index],
                     data: newcases_vs_totalcases_regioni_data[pnvtr_regioni[regione_index]],
                     borderColor: newcases_vs_totalcases_regioni_borderColors[i],
-                    fill: 'false'
+                    fill: 'false',
+                    lineTension: 0,
                 }
             )
         }

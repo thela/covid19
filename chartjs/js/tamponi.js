@@ -134,6 +134,7 @@ if ($element !== null){
                 fill: 'false',
                 yAxisID: t_axis_per_type[number_type],
                 type: t_chart_per_type[number_type],
+                lineTension: 0,
 
         barPercentage: 0.5,
         barThickness: 6,
