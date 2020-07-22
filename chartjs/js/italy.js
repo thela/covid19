@@ -102,9 +102,10 @@ function chartClickEvent(event, array){
             regione_label = 'Friuli Venezia Giulia'
         } else if(active[0].feature.properties.NAME_1==='Trentino-Alto Adige'){
            regione_label = 'Trentino Alto Adige'
-       }
-       //console.log(regione_label);
-       toggleRegioniData(regione_label, active[0]._index);
+        }
+        //console.log(regione_label);
+        toggleRegioniData(regione_label, active[0]._index);
+        updateChart();
    }
 }
 
