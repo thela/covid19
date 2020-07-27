@@ -10,11 +10,12 @@ if ($element !== null){
     pc_data = {
         datasets: []
     }
-    var pc_labels = ['confirmed', 'deaths', 'recovered'];
+    var pc_labels = ['active', 'deaths', 'recovered'];//'confirmed',
     pc_borderColors = {
         'confirmed': 'rgba(200, 0, 0, 1)',
         'recovered': 'rgba(0, 0, 100, 1)',
         'deaths': 'rgba(0, 0, 255, 1)',
+        'active': 'rgba(0, 255, 0, 1)',
     };
 
     //$.getJSON('data/plot_countries.json', function(data) {
@@ -48,7 +49,8 @@ if ($element !== null){
                     },
                 }],
                 yAxes: [{
-                    type: 'logarithmic',
+                    type: 'linear',// 'logarithmic',
+                    stacked: true,
                     scaleLabel: {
                         display: true,
                         labelString: 'Test Y'
@@ -72,7 +74,7 @@ function pc_ProcessData(country, data)
     pc_data = {
         datasets: []
     }
-    for (const type of ['confirmed', 'deaths', 'recovered']){
+    for (const type of pc_labels){
         pc_data['datasets'].push({
             label: type,
             data: data[country][type].map(

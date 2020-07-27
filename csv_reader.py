@@ -659,6 +659,7 @@ class CssegiCovidData:
                     'confirmed': [],
                     'deaths': [],
                     'recovered': [],
+                    'active': [],
                 }
                 for day in data_dict.keys():
                     json_data[country]['confirmed'].append({
@@ -672,6 +673,10 @@ class CssegiCovidData:
                     json_data[country]['recovered'].append({
                         'x': day.__str__(),
                         'y': int(data_dict[day]['Recovered']),
+                    })
+                    json_data[country]['active'].append({
+                        'x': day.__str__(),
+                        'y': int(data_dict[day]['Active']) if 'Active' in data_dict[day] else int(data_dict[day]['Confirmed']) - int(data_dict[day]['Deaths']) - int(data_dict[day]['Recovered']),
                     })
             else:
                 plot_lines = list(self.plot_lines)
