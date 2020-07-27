@@ -28,6 +28,8 @@ class DpcCovidData:
 
     dati_nazionale_folder = os.path.join(dpc_folder, 'dati-andamento-nazionale/')
 
+    nomi_trentino = ['P.A. Bolzano', 'P.A. Trento']
+
     def get_data_nazionale(self):
         data_nazionale = {}
         for daily_filename in os.listdir(self.dati_nazionale_folder):
@@ -88,13 +90,21 @@ class DpcCovidData:
                         reader_list = list(csv.DictReader(csvfile, delimiter=',', quotechar='"'))
                 res = {}
                 for regione in reader_list:
-                    regioni.add(regione['denominazione_regione'])
-                    if regione['denominazione_regione'] not in res:
-                        res[regione['denominazione_regione']] = {
+                    denominazione_regione = regione['denominazione_regione']
+                    if regione['denominazione_regione'] in ['P.A. Bolzano', 'P.A. Trento']:
+                        denominazione_regione = 'Trentino Alto Adige'
+
+                    if denominazione_regione not in regioni:
+                        regioni.add(denominazione_regione)
+
+                    if denominazione_regione not in res:
+                        res[denominazione_regione] = {
                             label: regione[label] for label in self.dati_province_labels
                         }
                     else:
-                        raise('doppia regione?')
+                        for label in self.dati_province_labels:
+
+                            res[denominazione_regione][label] += regione[label]
                 data_regioni[date] = res
             except ValueError:
                 pass
@@ -137,7 +147,25 @@ class DpcCovidData:
         return data_province
 
     def get_data_province_in_regione(self, regione):
-        return {day: self.data_province[day][regione] for day in self.data_regioni.keys()}
+        if regione != 'Trentino Alto Adige':
+            return {day: self.data_province[day][regione] for day in self.data_regioni.keys()}
+        else:
+            #accorpo il trentino
+            _res = {}
+            for day in self.data_regioni.keys():
+                _res[day] = {}
+                for denominazione in self.nomi_trentino:
+                    for provincia in self.data_province[day][denominazione]:
+                        if provincia not in _res[day]:
+                            _res[day][provincia] = self.data_province[day][denominazione][provincia]
+                        else:
+                            for label in self.data_province[day][denominazione][provincia]:
+                                if label in _res[day][provincia]:
+                                    _res[day][provincia][label] = int(_res[day][provincia][label]) + int(self.data_province[day][denominazione][provincia][label])
+                                else:
+                                    _res[day][provincia][label] = int(self.data_province[day][denominazione][provincia][label])
+
+            return _res
 
     def plot_province_per_regione(self, regioni, ax=None, json_save=False):
         x_list = list(self.data_province.keys())

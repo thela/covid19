@@ -1,6 +1,12 @@
 var shown_regioni = ['Lombardia']
 var italy_config= {}, worldchart, italy_backgroundColor= [],
-    $element = document.getElementById("italy_map"), italymap_ctx, regioni;
+    $element = document.getElementById("italy_map"), italymap_ctx, regioni,
+    names_translation = {
+        'Sicily': 'Sicilia',
+        'Apulia': 'Puglia',
+        'Friuli-Venezia Giulia': 'Friuli Venezia Giulia',
+        'Trentino-Alto Adige': 'Trentino Alto Adige'
+        };
 
 if ($element !== null){
     italymap_ctx = $element.getContext("2d");
@@ -94,7 +100,10 @@ function chartClickEvent(event, array){
 
     if (active.length >0) {
         var regione_label = active[0].feature.properties.NAME_1;
-        if(active[0].feature.properties.NAME_1==='Sicily'){
+        if(regione_label in names_translation){
+            regione_label = names_translation[regione_label]
+        }
+        /*if(active[0].feature.properties.NAME_1==='Sicily'){
             regione_label = 'Sicilia'
         } else if(active[0].feature.properties.NAME_1==='Apulia'){
             regione_label = 'Puglia'
@@ -102,9 +111,9 @@ function chartClickEvent(event, array){
             regione_label = 'Friuli Venezia Giulia'
         } else if(active[0].feature.properties.NAME_1==='Trentino-Alto Adige'){
            regione_label = 'Trentino Alto Adige'
-        }
+        }*/
         //console.log(regione_label);
-        toggleRegioniData(regione_label, active[0]._index);
+        toggleRegioniData(regione_label, active[0].feature.properties.NAME_1, active[0]._index);
         updateChart();
    }
 }
@@ -190,7 +199,7 @@ function addRegioniData(chart, regione, italychart_index) {
     }
 }
 
-function toggleRegioniData(regione_label, italychart_index) {
+function toggleRegioniData(regione_label, regione_graphlabel, italychart_index) {
     //regioneIndex = getRegioneIndex(regione);
 
     try{
@@ -221,7 +230,7 @@ function toggleRegioniData(regione_label, italychart_index) {
         t_analysisChart.update();
     } catch(e){}
 
-    shown_regioni = [regione_label]
+    shown_regioni = [regione_graphlabel]
 
     var shown;
     var colour;
