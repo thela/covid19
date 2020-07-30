@@ -46,6 +46,9 @@ if ($element !== null){
                 },
                 onClick: chartClickEvent
             },
+
+
+
             plugins: {
                 zoom: {
                     // Container for pan options

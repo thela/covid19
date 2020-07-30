@@ -29,12 +29,14 @@ function getMaxMin(data, y_min, y_max){
 
 function updateChart() {
     Chart.helpers.each(charts, function (instance) {
-        //instance.options.scales.xAxes[0].time.min = leftEnd;
-        //instance.options.scales.xAxes[0].time.max = rightEnd;
+        // if the first update is when a different province is selected, there are no left and right end. This loads the first
+        if(!leftEnd){
+            resetZoomWidth();
+        }
         instance.options.scales.xAxes[0].ticks.min = leftEnd;
         instance.options.scales.xAxes[0].ticks.max = rightEnd;
 
-        for( yAxis of instance.options.scales.yAxes){
+        for(yAxis of instance.options.scales.yAxes){
             if( yAxis.stacked) {
                 // if the axis is stacked, the y_max should consider all shown curves
                 var cumulative_dataset = {}
@@ -71,18 +73,6 @@ function updateChart() {
                         y_min = values.y_min;
                         y_max = values.y_max;
 
-                        /*for(x_y of dataset.data){
-                            if( parseInt(x_y['x'].format('x'))>=leftEnd && parseInt(x_y['x'].format('x'))<=rightEnd ){
-                                x_y_int = parseInt(x_y['y']);
-
-                                if(x_y_int < y_min){
-                                    y_min = x_y_int;
-                                }
-                                if(x_y_int > y_max){
-                                    y_max = x_y_int;
-                                }
-                            }
-                        }*/
                     }
                 }
             }
