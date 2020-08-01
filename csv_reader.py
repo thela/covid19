@@ -15,6 +15,22 @@ def json_serial(obj):
         return obj.__str__()
 
 
+class WorldPopulation:
+    # from https://data.worldbank.org/indicator/SP.POP.TOTL with http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=csv
+    data_source = 'other_data/API_SP.POP.TOTL_DS2_en_csv_v2_1217749.csv'
+
+    def population_by_country_by_year(self, year):
+        # TODO check that year as a string is 4 character and is between 1960 and 2019
+        return {nation_list['Country Name']: nation_list[str(year)] for nation_list in self.world_population_data}
+
+    def __init__(self):
+        with open(self.data_source, encoding='utf-8-sig') as csvfile:
+            for row in range(4):
+                csvfile.readlines()
+            self.world_population_data = list(csv.DictReader(csvfile, delimiter=',', quotechar='"'))
+        self.population_by_country = self.population_by_country_by_year(2019)
+
+
 class DpcCovidData:
     data_json_regioni = os.path.join(dpc_folder, 'dati-json/dpc-covid19-ita-regioni.json')
     dati_regioni_folder = os.path.join(dpc_folder, 'dati-regioni/')
