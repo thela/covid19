@@ -2,6 +2,7 @@ import csv
 import datetime
 import json
 import os
+
 import numpy as np
 
 dpc_folder = os.path.expanduser('~/Documents/sources/dpc/COVID-19')
@@ -26,7 +27,7 @@ class WorldPopulation:
     def __init__(self):
         with open(self.data_source, encoding='utf-8-sig') as csvfile:
             for row in range(4):
-                csvfile.readlines()
+                csvfile.readline()
             self.world_population_data = list(csv.DictReader(csvfile, delimiter=',', quotechar='"'))
         self.population_by_country = self.population_by_country_by_year(2019)
 
@@ -608,11 +609,17 @@ class CssegiCovidData:
     cssegi_daily_reports_folder = os.path.join(cssegi_folder, 'csse_covid_19_data/csse_covid_19_daily_reports/')
     plot_lines = ['Confirmed', 'Deaths', 'Recovered']
 
+    population_by_country = WorldPopulation().population_by_country
+
     replacements = {
         'Korea, South': 'South Korea',
         'Mainland China': 'China',
         'UK': 'United Kingdom',
-        'US': 'United States of America'
+        'US': 'United States of America',
+    }
+
+    country_translation_wp = {
+        'United States of America': 'United States'
     }
 
     @staticmethod
@@ -864,6 +871,78 @@ class CssegiCovidData:
             ax.set_xlim(left=100)
             ax.legend(plots, countries)
 
+    def weekly_data_per_capita(self, countries, ax=None):
+
+        if countries == 'all':
+            countries = self.countries
+
+        json_data = {}
+        weekly_data = {}
+        labels = ['Confirmed',
+                  'Deaths',
+                  'Recovered',
+                  'Active'
+                  ]
+        
+        for country in countries:
+            try:
+                population = int(self.population_by_country[country]) \
+                    if country in self.population_by_country \
+                    else int(self.population_by_country[self.country_translation_wp[country]])
+
+                data_dict = self.get_daily_data_by_country(country=country)
+
+                weekly_data[country] = {
+                    'confirmed': {},
+                    'deaths': {},
+                    'recovered': {},
+                    'active': {},
+                }
+
+                ordered_days = list(data_dict.keys())
+                ordered_days.sort()
+                prev_day = {label:0 for label in labels}
+                for day in ordered_days:
+                    week = day.isocalendar()[1]
+
+                    for label in labels:
+                        try:
+                            value = int(data_dict[day][label])-prev_day[label]
+                        except KeyError:
+                            value = int(data_dict[day]['Confirmed']) - int(data_dict[day]['Deaths']) - int(
+                                data_dict[day]['Recovered'])-prev_day[label]
+                        prev_day[label] += value
+
+                        if week in weekly_data[country][label.lower()]:
+                            weekly_data[country][label.lower()][week].append(
+                                value
+                            )
+                        else:
+                            weekly_data[country][label.lower()][week] = [value]
+
+                json_data[country] = {
+                    'confirmed': [],
+                    'deaths': [],
+                    'recovered': [],
+                    'active': [],
+                }
+                for label in labels:
+                    for week in weekly_data[country][label.lower()]:
+                        json_data[country][label.lower()].append({
+                            'x': week,
+                            'y': sum(weekly_data[country][label.lower()][week])/population*100000,
+                        })
+
+            except (KeyError, ValueError):
+                if country not in self.population_by_country:
+                    print(country)
+        with open('chartjs/data/weekly_data_per_capita.json', 'w') as json_fp:
+            json.dump(
+                json_data,
+                fp=json_fp,
+                default=json_serial
+            )
+
     def __init__(self):
         self.daily_data, self.countries = self.get_daily_data()
 
@@ -913,6 +992,7 @@ def exp_fit(x_list, y_list, guess_origin=False, point1=9, point2=16):
 
 
 if __name__ == "__main__":
+    wp = WorldPopulation()
     only_json = True
     dpc_covid_data = DpcCovidData()
     covid_data = CssegiCovidData()
@@ -935,6 +1015,7 @@ if __name__ == "__main__":
             'all',
             json_save=True
         )
+        covid_data.weekly_data_per_capita('all')
     else:
         import matplotlib as mpl
         import matplotlib.pyplot as plt

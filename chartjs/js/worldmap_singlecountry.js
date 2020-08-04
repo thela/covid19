@@ -171,19 +171,32 @@ function chartClickEvent(event, array){
       return;
     }
     var active = worldchart.getElementAtEvent(event);
-    setCountryData(pc_analysisChart, active[0].feature.properties.name, active[0]._index);
-    pc_analysisChart.data = pc_ProcessData(shown_country, countries_data);
+
+    setCountryData(active[0].feature.properties.name, active[0]._index);
+
+    pc_analysisChart.data = pc_ProcessData(shown_country);
 
     pc_analysisChart.options.title.text = shown_country;
     pc_analysisChart.update();
+
+
+    wdpc_analysisChart.data = wdpc_ProcessData(shown_country);
+
+    wdpc_analysisChart.options.title.text = shown_country;
+    wdpc_analysisChart.update();
+
+    wdpcm_analysisChart.data = wdpcm_ProcessData(shown_country);
+
+    wdpcm_analysisChart.options.title.text = shown_country;
+    wdpcm_analysisChart.update();
+
 }
 
-function setCountryData(chart, country, worldchart_index) {
+function setCountryData(country, worldchart_index) {
     worldchart_backgroundColor[worldchart_index] = selected_colour;
     worldchart_backgroundColor[
         worldchart.data['labels'].findIndex(country => country === shown_country)
     ] = other_colour;
     shown_country = country;
     worldchart.update();
-
 }

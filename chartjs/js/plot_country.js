@@ -3,7 +3,7 @@ var $element = document.getElementById("plot_country");
 
 if ($element !== null){
     var pc_ctx = $element.getContext("2d"),
-        pc_data, pc_country, countries_data,
+        pc_data, pc_country, pc_jsondata,
         shown_country = 'Italy',
         pc_borderColors;
 
@@ -27,8 +27,8 @@ if ($element !== null){
         dataType: 'json',
     }).done(function(jsonData)
     {
-        countries_data = jsonData;
-        pc_data = pc_ProcessData(shown_country, countries_data);
+        pc_jsondata = jsonData;
+        pc_data = pc_ProcessData(shown_country);
 
         var options = {
             maintainAspectRatio: false,
@@ -69,7 +69,7 @@ if ($element !== null){
 
 }
 
-function pc_ProcessData(country, data)
+function pc_ProcessData(country)
 {
     pc_data = {
         datasets: []
@@ -77,7 +77,7 @@ function pc_ProcessData(country, data)
     for (const type of pc_labels){
         pc_data['datasets'].push({
             label: type,
-            data: data[country][type].map(
+            data: pc_jsondata[country][type].map(
                 function(item) {
                     return {
                         'x': moment(item['x']), //.toISOString().slice(0,10),
