@@ -37,13 +37,13 @@ if ($element !== null){
             },
             tooltips: {
                 callbacks: {
-                    title() {
-                        return '';
+                    title(context) {
+                        return wdpcm_labels[context[0].datasetIndex];
                     },
-                    label(context) {
+                    /*label(context) {
                         //const v = context.dataset.data[context.dataIndex];
-                        return ['x: ' + context.xLabel, 'y: ' + wdpcm_labels[context.yLabel], 'v: ' + context.value];
-                    }
+                        return ['x: ' + context.xLabel, 'y: ' + wdpcm_labels[context.yLabel], 'v: ' + parseInt(context.x)];
+                    }*/
                 }
             },
             scales: {
@@ -62,11 +62,11 @@ if ($element !== null){
                         display: true,
                         min: -1,
                         max: 2,
-                        callback: function(value, index, values) {
+                        /*callback: function(value, index, values) {
                             // for a value (tick) equals to 8
                             return wdpcm_labels[value];
                             // 'junior-dev' will be returned instead and displayed on your chart
-                        }
+                        }*/
                     },
                     gridLines: {
                         display: false
@@ -86,8 +86,8 @@ white_orange = chroma.scale(['lightgray', 'orange']);
 orange_red = chroma.scale(['orange', 'red']);
 
 colour_middle = {
-    'deaths': 5,
-     'confirmed': 20
+    'deaths': 6,
+     'confirmed': 50
 }
 
 function wdpcm_ProcessData(country)
@@ -104,12 +104,12 @@ function wdpcm_ProcessData(country)
                     return {
                         x: item['x'], y: row, v: item['y']}
                     }).sort((a, b) => a.x - b.x),
-                        backgroundColor(context) {
+                    backgroundColor(context) {
                         const value = context.dataset.data[context.dataIndex].v;
-                        if(value>100){
-                            return orange_red((value-colour_middle[type])/colour_middle[type]).hex(); // #FF7F7F;
+                        if(value>colour_middle[type]){
+                            return orange_red((value-colour_middle[type])/colour_middle[type]).hex();
                         } else {
-                            return white_orange(value/colour_middle[type]).hex(); // #FF7F7F;
+                            return white_orange(value/colour_middle[type]).hex();
                         }
                     },
                     width(context) {

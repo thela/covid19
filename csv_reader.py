@@ -616,10 +616,51 @@ class CssegiCovidData:
         'Mainland China': 'China',
         'UK': 'United Kingdom',
         'US': 'United States of America',
+        "North Ireland": 'United Kingdom',
+        "Iran (Islamic Republic of)": "Iran",
+        "Gambia": "The Gambia",
+        "Hong Kong": "Hong Kong SAR",
+        "Macau": "Macao SAR",
+        "St. Martin": "Saint Martin",
+        "Holy See": "Vatican City",
+        "Congo (Brazzaville)": "Congo",
+        "Bahamas": "Bahamas, The",
+        "The Bahamas": "Bahamas, The",
+        "French Guiana": "Guyana",
+        "Viet Nam": "Vietnam",
+        "East Timor": "Timor-Leste",
+        "Cape Verde": "Cabo Verde",
+        "Republic of Moldova": "Moldova",
+        " Azerbaijan": "Azerbaijan",
+        "The Gambia": "Gambia, The",
+        "Czechia": "Czech Republic",
+        "Republic of Ireland": "Ireland",
+        "Russian Federation": "Russia",
+        "Congo (Kinshasa)": "Dem. Rep. Congo",
     }
 
     country_translation_wp = {
-        'United States of America': 'United States'
+        'United States of America': 'United States',
+        "Saint Martin": "St. Martin (French part)",
+        "Republic of Korea": "Korea, Rep.",
+        "Syria": "Syrian Arab Republic",
+        "Venezuela": "Venezuela, RB",
+        "Iran": "Iran, Islamic Rep.",
+        "Macao SAR": "Macao SAR, China",
+        "Yemen": "Yemen, Rep.",
+        "Saint Lucia": "St. Lucia",
+        "Dem. Rep. Congo": "Congo, Dem. Rep.",
+        "South Korea": "Korea, Rep.",
+        "Hong Kong SAR": "Hong Kong SAR, China",
+        "Saint Vincent and the Grenadines": "St. Vincent and the Grenadines",
+        "Laos": "Lao PDR",
+        "Slovakia": "Slovak Republic",
+        "Western Sahara": "",
+        "Saint Kitts and Nevis": "St. Kitts and Nevis",
+        "Kyrgyzstan": "Kyrgyz Republic",
+        "Brunei": "Brunei Darussalam",
+        "Egypt": "Egypt, Arab Rep.",
+        "Congo": "Congo, Rep.",
     }
 
     @staticmethod
@@ -890,6 +931,8 @@ class CssegiCovidData:
                     if country in self.population_by_country \
                     else int(self.population_by_country[self.country_translation_wp[country]])
 
+                if country in self.country_translation_wp and self.country_translation_wp[country] in countries:
+                    print("aaaaa", country, self.country_translation_wp[country])
                 data_dict = self.get_daily_data_by_country(country=country)
 
                 weekly_data[country] = {
@@ -901,7 +944,7 @@ class CssegiCovidData:
 
                 ordered_days = list(data_dict.keys())
                 ordered_days.sort()
-                prev_day = {label:0 for label in labels}
+                prev_day = {label: 0 for label in labels}
                 for day in ordered_days:
                     week = day.isocalendar()[1]
 
@@ -930,7 +973,7 @@ class CssegiCovidData:
                     for week in weekly_data[country][label.lower()]:
                         json_data[country][label.lower()].append({
                             'x': week,
-                            'y': sum(weekly_data[country][label.lower()][week])/population*100000,
+                            'y': sum(weekly_data[country][label.lower()][week])/population*100000*7/len(weekly_data[country][label.lower()][week]),
                         })
 
             except (KeyError, ValueError):
