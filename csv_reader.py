@@ -626,7 +626,7 @@ class CssegiCovidData:
         "Congo (Brazzaville)": "Congo",
         "Bahamas": "Bahamas, The",
         "The Bahamas": "Bahamas, The",
-        "French Guiana": "Guyana",
+        "French Guiana": "France",
         "Viet Nam": "Vietnam",
         "East Timor": "Timor-Leste",
         "Cape Verde": "Cabo Verde",
@@ -661,6 +661,7 @@ class CssegiCovidData:
         "Brunei": "Brunei Darussalam",
         "Egypt": "Egypt, Arab Rep.",
         "Congo": "Congo, Rep.",
+        "Gambia, The": "The Gambia",
     }
 
     @staticmethod
