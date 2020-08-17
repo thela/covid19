@@ -32,6 +32,18 @@ class WorldPopulation:
         self.population_by_country = self.population_by_country_by_year(2019)
 
 
+class ItalianPopulation:
+
+    data_source = 'other_data/tavola_pop_res01.csv'
+
+    def __init__(self):
+        with open(self.data_source, encoding='utf-8-sig') as csvfile:
+            for row in range(2):
+                csvfile.readline()
+            self.italian_population_data = list(csv.DictReader(csvfile, delimiter=',', quotechar='"'))
+        self.population_by_province = {province_list['Province']: province_list['Maschi + Femmine'] for province_list in self.italian_population_data}
+
+
 class DpcCovidData:
     data_json_regioni = os.path.join(dpc_folder, 'dati-json/dpc-covid19-ita-regioni.json')
     dati_regioni_folder = os.path.join(dpc_folder, 'dati-regioni/')
@@ -46,6 +58,8 @@ class DpcCovidData:
     dati_nazionale_folder = os.path.join(dpc_folder, 'dati-andamento-nazionale/')
 
     nomi_trentino = ['P.A. Bolzano', 'P.A. Trento']
+
+    popolazione_provincia = ItalianPopulation().population_by_province
 
     def get_data_nazionale(self):
         data_nazionale = {}
@@ -370,6 +384,61 @@ class DpcCovidData:
                         plot_label.append(
                             provincia
                     )
+
+        if json_save:
+            with open('chartjs/data/nuovi_malati_per_regione.json', 'w') as json_fp:
+                json.dump(
+                    data_italia,
+                    fp=json_fp,
+                    default=json_serial
+                )
+        else:
+            if not ax:
+                fig, ax = plt.subplots()
+                fig.autofmt_xdate()
+
+                ax.set_xlabel('days')
+            ax.legend(plots, plot_label)
+
+    def nuovi_malati_per_regione(self, regioni, ax=None, json_save=False):
+        x_list = list(self.data_province.keys())
+        x_list.sort()
+
+        if regioni == 'all':
+            regioni = self.regioni
+
+        plots = []
+        plot_label = []
+        data_italia = {}
+        for regione in regioni:
+            data_province = self.get_data_province_in_regione(regione)
+            data_italia[regione] = {}
+            province = list(data_province.values())[0].keys()
+
+            if json_save:
+
+                for day in data_province.keys():
+                    day_before = day - datetime.timedelta(days=1)
+
+                    for provincia in data_province[day]:
+                        if provincia not in data_italia[regione]:
+                            data_italia[regione][provincia] = []
+
+                        if day_before in data_province and provincia in data_province[day_before]:
+                            data_italia[regione][provincia].append({
+                                'x': day.__str__(),
+                                'y': int(data_province[day][provincia]['totale_casi']) -
+                                     int(data_province[day_before][provincia][
+                                             'totale_casi'])})
+            else:
+                for provincia in province:
+                    provincia_data = {day: data_province[day][provincia] for day in data_province.keys()}
+                    for plot_line in ['totale_casi']:
+                        plot_i, = ax.plot_date(x_list, [int(provincia_data[day][plot_line]) for day in x_list], '.-')
+                        plots.append(plot_i)
+                        plot_label.append(
+                            provincia
+                        )
 
         if json_save:
             with open('chartjs/data/nuovi_malati_per_regione.json', 'w') as json_fp:
