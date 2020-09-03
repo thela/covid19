@@ -383,7 +383,7 @@ class DpcCovidData:
                         plots.append(plot_i)
                         plot_label.append(
                             provincia
-                    )
+                        )
 
         if json_save:
             with open('chartjs/data/nuovi_malati_per_regione.json', 'w') as json_fp:
