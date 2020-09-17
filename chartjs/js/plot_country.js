@@ -10,7 +10,7 @@ if ($element !== null){
     pc_data = {
         datasets: []
     }
-    var pc_labels = ['active', 'deaths', 'recovered'];//'confirmed',
+    var pc_labels = ['deaths', 'active',  'recovered'];//'confirmed',
     pc_borderColors = {
         'confirmed': 'rgba(200, 0, 0, 1)',
         'recovered': 'rgba(0, 0, 100, 1)',
