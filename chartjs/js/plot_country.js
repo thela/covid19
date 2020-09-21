@@ -34,7 +34,7 @@ if ($element !== null){
             maintainAspectRatio: false,
             title: {
                 display: true,
-                text: 'Test Title'
+                text: shown_country
             },
                 legend: {
                     position: 'top'
@@ -45,7 +45,7 @@ if ($element !== null){
                     type: 'time',
                     scaleLabel: {
                         display: true,
-                        labelString: 'Test Time'
+                        labelString: 'Days'
                     },
                 }],
                 yAxes: [{
@@ -53,7 +53,7 @@ if ($element !== null){
                     stacked: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Test Y'
+                        labelString: 'Cases'
                     }
                 }]
             },

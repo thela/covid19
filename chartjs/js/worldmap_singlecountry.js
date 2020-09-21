@@ -182,7 +182,7 @@ function chartClickEvent(event, array){
 
     wdpc_analysisChart.data = wdpc_ProcessData(shown_country);
 
-    wdpc_analysisChart.options.title.text = shown_country;
+    //wdpc_analysisChart.options.title.text = shown_country;
     wdpc_analysisChart.update();
 
     wdpcm_analysisChart.data = wdpcm_ProcessData(shown_country);

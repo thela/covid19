@@ -35,7 +35,7 @@ if ($element !== null){
             maintainAspectRatio: false,
             title: {
                 display: true,
-                text: 'Weekly data per capita'
+                text: 'Weekly cases per 100k population'
             },
                 legend: {
                     position: 'top'
