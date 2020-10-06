@@ -51,7 +51,7 @@ if ($element !== null){
                     type: 'linear',
                     ticks: {
                         min: 0,
-                        max: 1
+                        max: 100
                     },
                     scaleLabel: {
                         display: true,
@@ -136,10 +136,10 @@ if ($element !== null){
                 type: t_chart_per_type[number_type],
                 lineTension: 0,
 
-        barPercentage: 0.5,
-        barThickness: 6,
-        maxBarThickness: 8,
-        minBarLength: 2,
+                barPercentage: 0.5,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
             })
 
         }

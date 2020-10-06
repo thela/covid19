@@ -335,7 +335,7 @@ class DpcCovidData:
                 nuovi_casi = day_data['y']
                 data_italia[regione]['percentuale_positivi'].append({
                     'x': day,
-                    'y': nuovi_casi/nuovi_tamponi_dict[day] if nuovi_tamponi_dict[day] != 0 else 0
+                    'y': nuovi_casi/nuovi_tamponi_dict[day]*100 if nuovi_tamponi_dict[day] != 0 else 0
                 })
 
         with open('chartjs/data/data_tamponi.json', 'w') as json_fp:
