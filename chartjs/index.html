@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <!-- loading local stylesheet .css file -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+    <head>
+        <!-- loading local stylesheet .css file -->
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
 
-</head>
+    </head>
 
-<body>
-    <!--  <canvas> element is used to draw graphics on a web page. -->
-    <div class="sameline">
-        <a href="italy.html">Italia</a> <a href="worldmap.html">Mondo</a>
-        <canvas id="italia_analysis" height="400" ></canvas>
-        <i class="caption"> data from <a href="https://github.com/pcm-dpc/COVID-19">https://github.com/pcm-dpc/COVID-19</a></i>
-    </div>
-    <div class="sameline">
-        <canvas id="roma_analysis" height="400"></canvas>
-        <i class="caption"> data from <a href="https://github.com/pcm-dpc/COVID-19">https://github.com/pcm-dpc/COVID-19</a></i>
-    </div>
-    <div class="sameline">
-        <canvas id="plot_newcases_vs_totalcases" height="400"></canvas>
-        <i class="caption"> data from <a href="https://github.com/CSSEGISandData/COVID-19">COVID-19 Dashboard by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a></i>
-    </div>
-    <div class="sameline">
-        <canvas id="plot_newcases_vs_totalcases_regioni" height="400"></canvas>
-        <i class="caption"> data from <a href="https://github.com/pcm-dpc/COVID-19">https://github.com/pcm-dpc/COVID-19</a></i>
-    </div>
+    <body>
+        <!--  <canvas> element is used to draw graphics on a web page. -->
+        <div class="sameline">
+            <a href="italy.html">Italia</a> <a href="worldmap.html">Mondo</a>
+            <canvas id="italia_analysis" height="400" ></canvas>
+            <i class="caption"> data from <a href="https://github.com/pcm-dpc/COVID-19">https://github.com/pcm-dpc/COVID-19</a></i>
+        </div>
+        <div class="sameline">
+            <canvas id="roma_analysis" height="400"></canvas>
+            <i class="caption"> data from <a href="https://github.com/pcm-dpc/COVID-19">https://github.com/pcm-dpc/COVID-19</a></i>
+        </div>
+        <div class="sameline">
+            <canvas id="plot_newcases_vs_totalcases" height="400"></canvas>
+            <i class="caption"> data from <a href="https://github.com/CSSEGISandData/COVID-19">COVID-19 Dashboard by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a></i>
+        </div>
+        <div class="sameline">
+            <canvas id="plot_newcases_vs_totalcases_regioni" height="400"></canvas>
+            <i class="caption"> data from <a href="https://github.com/pcm-dpc/COVID-19">https://github.com/pcm-dpc/COVID-19</a></i>
+        </div>
 
-    <!-- (best practice to load all the script files at the bottom) -->
+        <!-- (best practice to load all the script files at the bottom) -->
 
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-    <!-- loading a javascript library for data visualization Charts.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
-    <!-- local javascript file -->
-    <script src="js/dependencies/palette.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/plot_newcases_vs_totalcases.js"></script>
-    <script src="js/plot_newcases_vs_totalcases_regioni.js"></script>
-</body>
+        <!-- loading a javascript library for data visualization Charts.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+        <!-- local javascript file -->
+        <script src="js/dependencies/palette.js"></script>
+        <script src="js/script.js"></script>
+        <script src="js/plot_newcases_vs_totalcases.js"></script>
+        <script src="js/plot_newcases_vs_totalcases_regioni.js"></script>
+    </body>
 
 </html>

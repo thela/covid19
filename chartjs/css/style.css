@@ -7,21 +7,61 @@
   text-align:center;
 }
 .caption {
-    font-size: 11px;
+    font-size: 10px;
 }
 
-html, body { height: 100%; padding: 0; margin: 0; }
+html, body { height: 100%; padding: 0; margin: 1em; }
 
-div {
-    width: 50%;
-    height: 50%;
+.sameline {
+    width: 100%;
+    height: 100%;
     float: left;
 }
+.header {
+  /*background-color: #f1f1f1;*/
+  padding: 30px;
+  text-align: center;
+}
 
-@media (max-width:1000px){
+#navbar {
+  overflow: hidden;
+  background-color: #fff;
+}
+
+#navbar a {
+  float: left;
+  display: block;
+  /*color: #f2f2f2;*/
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/*#navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+#navbar a.active {
+  background-color: #4CAF50;
+  color: white;
+}*/
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 80px;
+}
+
+/*@media (max-width:1000px){
     div {
         width: 100%;
         height: 100%;
         float: left;
     }
-}
+}*/

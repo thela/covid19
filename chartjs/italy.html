@@ -10,32 +10,40 @@
     </head>
 
     <body>
-            <div class="sameline">
-                <a href="index.html">Pagina Generale</a> <i class="caption"> data from <a href="https://github.com/pcm-dpc/COVID-19">https://github.com/pcm-dpc/COVID-19</a></i>
-                <button onclick="setZoomWidth(8)">Last Week</button>
-                <button onclick="setZoomWidth(30)">Last Month</button>
-                <button onclick="resetZoomWidth()">Reset Zoom</button>
 
-                <p style="height: 100%; width:100%;">
+        <div class="header">
+            <p style="width: 40%;">
+                <canvas id="italy_map" ></canvas>
+            </p>
+        </div>
+
+        <div id="navbar">
+            <a href="index.html">Pagina Generale</a>
+            <i class="caption">
+            data from <a href="https://github.com/pcm-dpc/COVID-19">https://github.com/pcm-dpc/COVID-19</a></i>
+
+            <button onclick="setZoomWidth(8)">Last Week</button>
+            <button onclick="setZoomWidth(30)">Last Month</button>
+            <button onclick="resetZoomWidth()">Reset Zoom</button>
+        </div>
+
+        <div class="content">
+            <div class="sameline">
+                <p style="height: 80%; width: 100%;">
                     <canvas id="tamponi" height="400"></canvas>
                 </p>
-             </div>
+            </div>
             <div class="sameline">
-                <p style="height: 100%; width:80%;">
+                <p style="height: 80%; width: 100%;">
                     <canvas id="plot_regioni" ></canvas>
                 </p>
             </div>
             <div class="sameline">
-                <p style="height: 80%; width:100%;">
-                    <canvas id="italy_map" ></canvas>
-                </p>
-            </div>
-            <div class="sameline">
-                <p style="height: 100%; width:80%;">
+                <p style="height: 80%; width: 100%;">
                     <canvas id="nuovi_malati_per_regione" height="400"></canvas>
                 </p>
-             </div>
-
+            </div>
+        </div>
         <!-- (best practice to load all the script files at the bottom) -->
 
         <!-- jQuery library -->
@@ -57,6 +65,21 @@
         <script src="js/plot_regioni.js"></script>
         <script src="js/italy.js"></script>
         <script src="js/coordinated_zoom.js"></script>
+
+        <script>
+        window.onscroll = function() {myFunction()};
+
+        var navbar = document.getElementById("navbar");
+        var sticky = navbar.offsetTop;
+
+        function myFunction() {
+          if (window.pageYOffset >= sticky) {
+            navbar.classList.add("sticky")
+          } else {
+            navbar.classList.remove("sticky");
+          }
+        }
+        </script>
     </body>
 
 </html>
