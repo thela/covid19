@@ -13,7 +13,8 @@ function getMaxMin(data, y_min, y_max){
 
     for(x_y of data){
         if( parseInt(x_y['x'].format('x'))>=leftEnd && parseInt(x_y['x'].format('x'))<=rightEnd ){
-            x_y_int = parseInt(x_y['y']);
+            //x_y_int = parseInt(x_y['y']);
+            x_y_int = x_y['y'];
 
             if(x_y_int < y_min){
                 y_min = x_y_int;
@@ -23,7 +24,9 @@ function getMaxMin(data, y_min, y_max){
             }
         }
     }
-    return {y_min: y_min, y_max: y_max}
+    border = (y_max-y_min)*.1;
+
+    return {y_min: y_min-border, y_max: y_max+border}
 }
 
 

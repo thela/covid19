@@ -3,7 +3,7 @@ var $element = document.getElementById("tamponi"),
     shown_regione = 'Lombardia',
     tamponi_data,
     t_borderColors, r_regioni,
-    t_type_to_plot = ['tamponi', 'percentuale_positivi'], //nuovi_casi
+    t_type_to_plot = ['tamponi', 'percentuale_positivi']//, 'nuovi_casi']
     t_color_per_type = {
         'tamponi': '#7fe9ff',
         'percentuale_positivi': '#ff3232',
