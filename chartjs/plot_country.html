@@ -26,7 +26,7 @@
 
         <div class="content">
             <div >
-                           <canvas id="plot_country" height="400px"></canvas>
+                <canvas id="plot_country" height="400px"></canvas>
             </div >
             <div >
                 <canvas id="weekly_data_per_capita" height="400px" ></canvas>
@@ -57,6 +57,21 @@
         <script src="js/plot_country.js"></script>
         <script src="js/weekly_data_per_capita.js"></script>
         <script src="js/weekly_data_per_capita_matrix.js"></script>
+
+        <script>
+            window.onscroll = function() {myFunction()};
+
+            var navbar = document.getElementById("navbar");
+            var sticky = navbar.offsetTop;
+
+            function myFunction() {
+              if (window.pageYOffset >= sticky) {
+                navbar.classList.add("sticky")
+              } else {
+                navbar.classList.remove("sticky");
+              }
+            }
+        </script>
     </body>
 
 </html>
