@@ -10,18 +10,30 @@
     </head>
 
     <body>
-        <div >
-            <a href="index.html">Pagina Generale</a> <i class="caption"> data from <a href="https://github.com/CSSEGISandData/COVID-19">COVID-19 Dashboard by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a></i>
-            <canvas id="plot_country" height="400px"></canvas>
-        </div >
-        <div >
-            <canvas id="world_map_single" height="400px" ></canvas>
+        <div class="header">
+            <p style="width: 40%;">
+                <canvas id="world_map_single" ></canvas>
+            </p>
         </div>
-        <div >
-            <canvas id="weekly_data_per_capita" height="400px" ></canvas>
+
+        <div id="navbar">
+            <a href="index.html">Pagina Generale</a>
+            <i class="caption">
+                data from <a href="https://github.com/CSSEGISandData/COVID-19">COVID-19 Dashboard by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a>
+            </i>
+
         </div>
-        <div >
-            <canvas id="weekly_data_per_capita_matrix" height="50px" ></canvas>
+
+        <div class="content">
+            <div >
+                           <canvas id="plot_country" height="400px"></canvas>
+            </div >
+            <div >
+                <canvas id="weekly_data_per_capita" height="400px" ></canvas>
+            </div>
+            <div >
+                <canvas id="weekly_data_per_capita_matrix" height="50px" ></canvas>
+            </div>
         </div>
         <!-- (best practice to load all the script files at the bottom) -->
 
