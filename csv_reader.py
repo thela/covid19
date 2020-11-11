@@ -1120,6 +1120,7 @@ if __name__ == "__main__":
         dpc_covid_data.nuovi_malati_per_regione(regioni='all', json_save=True)
         dpc_covid_data.save_data_regioni(regioni='all')
         dpc_covid_data.tamponi_data(regioni='all')
+        
         covid_data.plot_newcases_vs_totalcases(
             'all',  # ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
             json_save=True
