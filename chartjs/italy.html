@@ -17,13 +17,13 @@
         </div>
 
         <div id="navbar">
-            <a href="index.html">Pagina Generale</a>
+            <a class="button" href="index.html">Pagina Generale</a>
+
+            <a class="button" href="#" id="lastweek">Last Week</a>
+            <a class="button" href="#" id="lastmonth">Last Month</a>
+            <a class="button" href="#" id="resetzoom">Reset Zoom</a>
             <i class="caption">
             data from <a href="https://github.com/pcm-dpc/COVID-19">https://github.com/pcm-dpc/COVID-19</a></i>
-
-            <button onclick="setZoomWidth(8)">Last Week</button>
-            <button onclick="setZoomWidth(30)">Last Month</button>
-            <button onclick="resetZoomWidth()">Reset Zoom</button>
         </div>
 
         <div class="content">
@@ -66,18 +66,30 @@
         <script src="js/coordinated_zoom.js"></script>
 
         <script>
-        window.onscroll = function() {myFunction()};
+            window.onscroll = function() {myFunction()};
 
-        var navbar = document.getElementById("navbar");
-        var sticky = navbar.offsetTop;
+            var navbar = document.getElementById("navbar");
+            var sticky = navbar.offsetTop;
 
-        function myFunction() {
-          if (window.pageYOffset >= sticky) {
-            navbar.classList.add("sticky")
-          } else {
-            navbar.classList.remove("sticky");
-          }
-        }
+            function myFunction() {
+              if (window.pageYOffset >= sticky) {
+                navbar.classList.add("sticky")
+              } else {
+                navbar.classList.remove("sticky");
+              }
+            }
+            document.getElementById('lastweek').onclick = function(e){
+                setZoomWidth(8);
+                return false;
+            }
+            document.getElementById('lastmonth').onclick = function(e){
+                setZoomWidth(30);
+                return false;
+            }
+            document.getElementById('resetzoom').onclick = function(e){
+                resetZoomWidth();
+                return false;
+            }
         </script>
     </body>
 

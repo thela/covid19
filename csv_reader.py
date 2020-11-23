@@ -783,6 +783,16 @@ class CssegiCovidData:
         return res, countries
 
     def get_daily_data_by_country(self, country, start_from_cases=None):
+        """
+
+        :param country:
+        :param start_from_cases:
+        :return: a dictionary with days as keys, and as values a dictionary of
+                    'Confirmed'
+                    'Deaths'
+                    'Recovered'
+                    cumulative values since the beginning
+        """
         if not start_from_cases:
             return {day: day_data[country] for day, day_data in self.daily_data.items() if country in day_data}
         else:
@@ -1056,6 +1066,107 @@ class CssegiCovidData:
                 default=json_serial
             )
 
+    def daily_data(self, countries, ax=None):
+
+        if countries == 'all':
+            countries = self.countries
+
+        daily_data = {}
+        labels = ['Confirmed',
+                  'Deaths',
+                  'Recovered',
+                  'Active'
+                  ]
+
+        for country in countries:
+
+            data_dict = self.get_daily_data_by_country(country=country)
+
+            daily_data[country] = {
+                'confirmed': {},
+                'deaths': {},
+                'recovered': {},
+                'active': {},
+            }
+
+            ordered_days = list(data_dict.keys())
+            ordered_days.sort()
+            for day in ordered_days:
+                for label in labels:
+                    try:
+                        daily_data[country][label.lower()][day] = int(data_dict[day][label])
+
+                    except KeyError:
+                        daily_data[country][label.lower()][day] = int(data_dict[day]['Confirmed']) - int(data_dict[day]['Deaths']) - int(
+                            data_dict[day]['Recovered'])
+
+    def weekly_data_per_capita_averaged(self, countries, ax=None):
+
+        if countries == 'all':
+            countries = self.countries
+
+        json_data = {}
+        daily_data = {}
+        labels = ['Confirmed',
+                  'Deaths',
+                  'Recovered',
+                  'Active'
+                  ]
+
+        for country in countries:
+            try:
+                population = int(self.population_by_country[country]) \
+                    if country in self.population_by_country \
+                    else int(self.population_by_country[self.country_translation_wp[country]])
+
+                if country in self.country_translation_wp and self.country_translation_wp[country] in countries:
+                    print("aaaaa", country, self.country_translation_wp[country])
+                data_dict = self.get_daily_data_by_country(country=country)
+
+                daily_data[country] = {
+                    'confirmed': {},
+                    'deaths': {},
+                    'recovered': {},
+                    'active': {},
+                }
+
+                ordered_days = list(data_dict.keys())
+                ordered_days.sort()
+                for day in ordered_days:
+                    for label in labels:
+                        try:
+                            daily_data[country][label.lower()][day] = int(data_dict[day][label])
+
+                        except KeyError:
+                            daily_data[country][label.lower()][day] = int(data_dict[day]['Confirmed']) - int(data_dict[day]['Deaths']) - int(
+                                data_dict[day]['Recovered'])
+
+
+
+                '''json_data[country] = {
+                    'confirmed': [],
+                    'deaths': [],
+                    'recovered': [],
+                    'active': [],
+                }
+                for label in labels:
+                    for week in weekly_data[country][label.lower()]:
+                        json_data[country][label.lower()].append({
+                            'x': week,
+                            'y': sum(weekly_data[country][label.lower()][week]) / population * 100000 * 7 / len(
+                                weekly_data[country][label.lower()][week]),
+                        })'''
+
+            except (KeyError, ValueError):
+                if country not in self.population_by_country:
+                    print(country)
+        with open('chartjs/data/weekly_data_per_capita_averaged.json', 'w') as json_fp:
+            json.dump(
+                json_data,
+                fp=json_fp,
+                default=json_serial
+            )
+
     def __init__(self):
         self.daily_data, self.countries = self.get_daily_data()
 
@@ -1130,6 +1241,7 @@ if __name__ == "__main__":
             json_save=True
         )
         covid_data.weekly_data_per_capita('all')
+        #covid_data.weekly_data_per_capita_averaged('all')
     else:
         import matplotlib as mpl
         import matplotlib.pyplot as plt

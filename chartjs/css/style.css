@@ -28,7 +28,7 @@ html, body { height: 100%; padding: 0; margin: 1em; }
   background-color: #fff;
 }
 
-#navbar a {
+#navbar a, #header a {
   float: left;
   display: block;
   /*color: #f2f2f2;*/
@@ -36,6 +36,20 @@ html, body { height: 100%; padding: 0; margin: 1em; }
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
+}
+#navbar > a.button {
+    display:inline-block;
+    padding:0.35em 1.2em;
+    border:0.1em solid #FFB900;
+    margin:0 0.3em 0.3em 0;
+    border-radius:0.12em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family:'Roboto',sans-serif;
+    font-weight:300;
+    color:#8E6700;
+    text-align:center;
+    transition: all 0.2s;
 }
 
 /*#navbar a:hover {
