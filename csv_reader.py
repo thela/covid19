@@ -808,6 +808,137 @@ class CssegiCovidData:
                             res.append(day_data[country])
             return res
 
+    def cumulative_country_tipology_day(self):
+        if not self.cumulative_country_tipology_day_data:
+            self.cumulative_country_tipology_day_data = {}
+            labels = ['Confirmed',
+                      'Deaths',
+                      'Recovered',
+                      'Active'
+                      ]
+
+            for country in self.countries:
+                data_dict = self.get_daily_data_by_country(country=country)
+
+                self.cumulative_country_tipology_day_data[country] = {
+                    'confirmed': {},
+                    'deaths': {},
+                    'recovered': {},
+                    'active': {},
+                }
+
+                ordered_days = list(data_dict.keys())
+                ordered_days.sort()
+                for day in ordered_days:
+                    for label in labels:
+                        try:
+                            self.cumulative_country_tipology_day_data[country][label.lower()][day] = int(data_dict[day][label])
+
+                        except KeyError:
+                            self.cumulative_country_tipology_day_data[country][label.lower()][day] = int(data_dict[day]['Confirmed']) - int(
+                                data_dict[day]['Deaths']) - int(
+                                data_dict[day]['Recovered'])
+
+    def daily_country_tipology_day(self):
+        def process_tipology(tipology_data):
+
+            daily_data = {}
+            previous_day = None
+            ordered_days = list(tipology_data.keys())
+            ordered_days.sort()
+            for day in ordered_days:
+                if not previous_day:
+                    daily_data[day] = tipology_data[day]
+                else:
+                    daily_data[day] = tipology_data[day] - tipology_data[previous_day]
+
+                # print(country, tipology, day, tipology_data[day], daily_data[day])
+
+                # at the end of the loop, day becomes previous_day
+                previous_day = day
+            return daily_data
+
+        if not self.daily_country_tipology_day_data:
+            self.cumulative_country_tipology_day()
+            self.daily_country_tipology_day_data = {}
+
+            for country, country_data in self.cumulative_country_tipology_day_data.items():
+                self.daily_country_tipology_day_data[country] = {
+                    'confirmed': {},
+                    'deaths': {},
+                    'recovered': {},
+                    'active': {},
+                }
+                for tipology, tipology_data in country_data.items():
+                    '''daily_data = {}
+                    previous_day = None
+                    ordered_days = list(tipology_data.keys())
+                    ordered_days.sort()
+                    for day in ordered_days:
+                        if not previous_day:
+                            daily_data[day] = tipology_data[day]
+                        else:
+                            daily_data[day] = tipology_data[day] - tipology_data[previous_day]
+
+                        print(country, tipology, day, tipology_data[day], daily_data[day])
+
+                        # at the end of the loop, day becomes previous_day
+                        previous_day = day'''
+                    self.daily_country_tipology_day_data[country][tipology] = process_tipology(tipology_data)
+
+    def averaged_country_tipology_day(self, timebin_size=7):
+        def daterange(start_date, timebin_size):
+            for n in range(timebin_size):
+                yield start_date - datetime.timedelta(days=n)
+
+        def process_tipology(tipology_data, timebin_size):
+
+            daily_data = {}
+            ordered_days = list(tipology_data.keys())
+            ordered_days.sort()
+            for day in ordered_days:
+                day_bin = {
+                    'oldest_day': day,
+                    'most_recent_day': day,
+                    'totalvalue': 0,
+                    'averaged_value': None
+                }
+                for day_in_bin in daterange(day, timebin_size):
+                    if day_in_bin in tipology_data:
+                        day_bin['totalvalue'] += tipology_data[day_in_bin]
+                        if day_in_bin > day_bin['most_recent_day']:
+                            day_bin['most_recent_day'] = day_in_bin
+                        if day_in_bin < day_bin['oldest_day']:
+                            day_bin['oldest_day'] = day_in_bin
+
+                    daily_data[day] = day_bin['totalvalue'] / ((day_bin['most_recent_day'] - day_bin['oldest_day']).days+1)
+
+            return daily_data
+
+        if not self.averaged_country_tipology_day_data:
+            self.daily_country_tipology_day()
+            self.averaged_country_tipology_day_data = {}
+
+            for country, country_data in self.daily_country_tipology_day_data.items():
+                self.averaged_country_tipology_day_data[country] = {
+                }
+                for tipology, tipology_data in country_data.items():
+                    '''daily_data = {}
+                    previous_day = None
+                    ordered_days = list(tipology_data.keys())
+                    ordered_days.sort()
+                    for day in ordered_days:
+                        if not previous_day:
+                            daily_data[day] = tipology_data[day]
+                        else:
+                            daily_data[day] = tipology_data[day] - tipology_data[previous_day]
+
+                        print(country, tipology, day, tipology_data[day], daily_data[day])
+
+                        # at the end of the loop, day becomes previous_day
+                        previous_day = day'''
+                    self.averaged_country_tipology_day_data[country][tipology] = process_tipology(tipology_data, timebin_size)
+
     def plot_countries(self, countries, ax=None, json_save=False):
         if not ax and not json_save:
             fig, ax = plt.subplots()
@@ -1066,53 +1197,13 @@ class CssegiCovidData:
                 default=json_serial
             )
 
-    def daily_data(self, countries, ax=None):
-
-        if countries == 'all':
-            countries = self.countries
-
-        daily_data = {}
-        labels = ['Confirmed',
-                  'Deaths',
-                  'Recovered',
-                  'Active'
-                  ]
-
-        for country in countries:
-
-            data_dict = self.get_daily_data_by_country(country=country)
-
-            daily_data[country] = {
-                'confirmed': {},
-                'deaths': {},
-                'recovered': {},
-                'active': {},
-            }
-
-            ordered_days = list(data_dict.keys())
-            ordered_days.sort()
-            for day in ordered_days:
-                for label in labels:
-                    try:
-                        daily_data[country][label.lower()][day] = int(data_dict[day][label])
-
-                    except KeyError:
-                        daily_data[country][label.lower()][day] = int(data_dict[day]['Confirmed']) - int(data_dict[day]['Deaths']) - int(
-                            data_dict[day]['Recovered'])
-
     def weekly_data_per_capita_averaged(self, countries, ax=None):
 
         if countries == 'all':
             countries = self.countries
+        self.averaged_country_tipology_day(7)
 
         json_data = {}
-        daily_data = {}
-        labels = ['Confirmed',
-                  'Deaths',
-                  'Recovered',
-                  'Active'
-                  ]
-
         for country in countries:
             try:
                 population = int(self.population_by_country[country]) \
@@ -1123,43 +1214,22 @@ class CssegiCovidData:
                     print("aaaaa", country, self.country_translation_wp[country])
                 data_dict = self.get_daily_data_by_country(country=country)
 
-                daily_data[country] = {
-                    'confirmed': {},
-                    'deaths': {},
-                    'recovered': {},
-                    'active': {},
-                }
-
-                ordered_days = list(data_dict.keys())
-                ordered_days.sort()
-                for day in ordered_days:
-                    for label in labels:
-                        try:
-                            daily_data[country][label.lower()][day] = int(data_dict[day][label])
-
-                        except KeyError:
-                            daily_data[country][label.lower()][day] = int(data_dict[day]['Confirmed']) - int(data_dict[day]['Deaths']) - int(
-                                data_dict[day]['Recovered'])
-
-
-
-                '''json_data[country] = {
+                json_data[country] = {
                     'confirmed': [],
                     'deaths': [],
                     'recovered': [],
                     'active': [],
                 }
-                for label in labels:
-                    for week in weekly_data[country][label.lower()]:
+                for label in json_data[country].keys():
+                    for day in self.averaged_country_tipology_day_data[country][label]:
                         json_data[country][label.lower()].append({
-                            'x': week,
-                            'y': sum(weekly_data[country][label.lower()][week]) / population * 100000 * 7 / len(
-                                weekly_data[country][label.lower()][week]),
-                        })'''
-
+                            'x': day,
+                            'y': self.averaged_country_tipology_day_data[country][label][day] / population * 100000,
+                        })
             except (KeyError, ValueError):
                 if country not in self.population_by_country:
                     print(country)
+
         with open('chartjs/data/weekly_data_per_capita_averaged.json', 'w') as json_fp:
             json.dump(
                 json_data,
@@ -1169,6 +1239,9 @@ class CssegiCovidData:
 
     def __init__(self):
         self.daily_data, self.countries = self.get_daily_data()
+        self.cumulative_country_tipology_day_data = None
+        self.daily_country_tipology_day_data = None
+        self.averaged_country_tipology_day_data = None
 
 
 def plot_exp(ax, x_list, a, b):
@@ -1218,9 +1291,14 @@ def exp_fit(x_list, y_list, guess_origin=False, point1=9, point2=16):
 if __name__ == "__main__":
     wp = WorldPopulation()
     only_json = True
+    test = False
     dpc_covid_data = DpcCovidData()
     covid_data = CssegiCovidData()
-    if only_json:
+
+    if test:
+        covid_data.weekly_data_per_capita_averaged('all')
+
+    elif only_json:
         dpc_covid_data.roma_analysis(json_save=True)
         dpc_covid_data.italia_analysis(json_save=True)
         dpc_covid_data.plot_newcases_vs_totalcases_regioni(
@@ -1231,6 +1309,8 @@ if __name__ == "__main__":
         dpc_covid_data.nuovi_malati_per_regione(regioni='all', json_save=True)
         dpc_covid_data.save_data_regioni(regioni='all')
         dpc_covid_data.tamponi_data(regioni='all')
+        dpc_covid_data.roma_analysis(json_save=True)
+        dpc_covid_data.italia_analysis(json_save=True)
         
         covid_data.plot_newcases_vs_totalcases(
             'all',  # ['Italy', 'Spain', 'Iran', 'United States of America', 'South Korea', 'United Kingdom', 'Japan'],
@@ -1241,7 +1321,7 @@ if __name__ == "__main__":
             json_save=True
         )
         covid_data.weekly_data_per_capita('all')
-        #covid_data.weekly_data_per_capita_averaged('all')
+        covid_data.weekly_data_per_capita_averaged('all')
     else:
         import matplotlib as mpl
         import matplotlib.pyplot as plt
