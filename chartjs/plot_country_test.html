@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>World map</title>
+        <!-- loading local stylesheet .css file -->
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+
+    </head>
+
+    <body>
+        <div class="header">
+            <p style="width: 40%;">
+                <canvas id="world_map_single" ></canvas>
+            </p>
+        </div>
+
+        <div id="navbar">
+            <a class="button" href="index.html">Pagina Generale</a>
+            <i class="caption">
+                data from <a href="https://github.com/CSSEGISandData/COVID-19">COVID-19 Dashboard by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a>
+            </i>
+
+        </div>
+
+        <div class="content">
+            <div >
+                <canvas id="plot_country" height="400px"></canvas>
+            </div >
+            <div >
+                <canvas id="weekly_data_per_capita" height="400px" ></canvas>
+            </div>
+            <div >
+                <canvas id="daily_data_per_capita" height="400px" ></canvas>
+            </div>
+            <div >
+                <canvas id="daily_data_per_capita_average" height="400px" ></canvas>
+            </div>
+            <div >
+                <canvas id="weekly_data_per_capita_matrix" height="50px" ></canvas>
+            </div>
+        </div>
+        <!-- (best practice to load all the script files at the bottom) -->
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <!-- loading a javascript library for data visualization Charts.js -->
+        <!-- local javascript file -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.1.0/chroma.min.js" integrity="sha512-yocoLferfPbcwpCMr8v/B0AB4SWpJlouBwgE0D3ZHaiP1nuu5djZclFEIj9znuqghaZ3tdCMRrreLoM8km+jIQ==" crossorigin="anonymous"></script>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.0.0-alpha4/dist/chartjs-chart-matrix.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"></script>
+        <script src="js/dependencies/Chart.Geo.min.js"></script>
+        <script src="js/dependencies/palette.js"></script>
+        <script src="js/worldmap_singlecountry.js"></script>
+        <script src="js/plot_country.js"></script>
+        <script src="js/weekly_data_per_capita.js"></script>
+        <script src="js/daily_data_per_capita.js"></script>
+        <script src="js/daily_data_per_capita_average.js"></script>
+        <script src="js/weekly_data_per_capita_matrix.js"></script>
+
+        <script>
+            window.onscroll = function() {myFunction()};
+
+            var navbar = document.getElementById("navbar");
+            var sticky = navbar.offsetTop;
+
+            function myFunction() {
+              if (window.pageYOffset >= sticky) {
+                navbar.classList.add("sticky")
+              } else {
+                navbar.classList.remove("sticky");
+              }
+            }
+        </script>
+    </body>
+
+</html>

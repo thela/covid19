@@ -190,6 +190,12 @@ function chartClickEvent(event, array){
     wdpcm_analysisChart.options.title.text = shown_country;
     wdpcm_analysisChart.update();
 
+    ddpca_analysisChart.data = ddpca_ProcessData(shown_country);
+    ddpca_analysisChart.update();
+
+    ddpc_analysisChart  .data = ddpc_ProcessData(shown_country);
+    ddpc_analysisChart.update();
+
 }
 
 function setCountryData(country, worldchart_index) {

@@ -1197,7 +1197,50 @@ class CssegiCovidData:
                 default=json_serial
             )
 
-    def weekly_data_per_capita_averaged(self, countries, ax=None):
+    def daily_data_per_capita(self, countries):
+
+        if countries == 'all':
+            countries = self.countries
+
+        self.daily_country_tipology_day()
+
+        data_to_process = self.cumulative_country_tipology_day_data
+        json_data = {}
+        for country in countries:
+            try:
+                population = int(self.population_by_country[country]) \
+                    if country in self.population_by_country \
+                    else int(self.population_by_country[self.country_translation_wp[country]])
+
+                if country in self.country_translation_wp and self.country_translation_wp[country] in countries:
+                    print("aaaaa", country, self.country_translation_wp[country])
+                data_dict = self.get_daily_data_by_country(country=country)
+
+                json_data[country] = {
+                    'confirmed': [],
+                    'deaths': [],
+                    'recovered': [],
+                    'active': [],
+                }
+                for label in json_data[country].keys():
+                    for day in data_to_process[country][label]:
+                        json_data[country][label.lower()].append({
+                            'x': day,
+                            'y': data_to_process[country][label][day],
+                            #'y': data_to_process[country][label][day] / population * 100000,
+                        })
+            except (KeyError, ValueError):
+                if country not in self.population_by_country:
+                    print(country)
+
+        with open('chartjs/data/daily_data_per_capita.json', 'w') as json_fp:
+            json.dump(
+                json_data,
+                fp=json_fp,
+                default=json_serial
+            )
+
+    def daily_data_per_capita_average(self, countries):
 
         if countries == 'all':
             countries = self.countries
@@ -1230,7 +1273,7 @@ class CssegiCovidData:
                 if country not in self.population_by_country:
                     print(country)
 
-        with open('chartjs/data/weekly_data_per_capita_averaged.json', 'w') as json_fp:
+        with open('chartjs/data/daily_data_per_capita_average.json', 'w') as json_fp:
             json.dump(
                 json_data,
                 fp=json_fp,
@@ -1296,7 +1339,7 @@ if __name__ == "__main__":
     covid_data = CssegiCovidData()
 
     if test:
-        covid_data.weekly_data_per_capita_averaged('all')
+        covid_data.daily_data_per_capita_averaged('all')
 
     elif only_json:
         dpc_covid_data.roma_analysis(json_save=True)
@@ -1321,7 +1364,8 @@ if __name__ == "__main__":
             json_save=True
         )
         covid_data.weekly_data_per_capita('all')
-        covid_data.weekly_data_per_capita_averaged('all')
+        covid_data.daily_data_per_capita('all')
+        covid_data.daily_data_per_capita_average('all')
     else:
         import matplotlib as mpl
         import matplotlib.pyplot as plt
