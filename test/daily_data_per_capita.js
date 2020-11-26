@@ -18,11 +18,35 @@ const gXAxis = graph.append('g')
 
 const gYAxis = graph.append('g');
 
+function fetchData(url) {
+return fetch(url).then((response) => {
+if (response.status != 200) {
+throw new Error(`Unexpected response status: ${response.status}`);
+} else {
+return response.json();
+}
+});
+}
+function downloadData() {
+const primaryDataUrl = "https://coronavirus-tracker-api.herokuapp.com/all";
+const backupDataUrl = "https://gentle-peak-51697.herokuapp.com/all";
+return fetchData(primaryDataUrl).catch((error) => {
+console.log(error);
+console.warn(`Fetching data from primary API (${primaryDataUrl}) failed so attempting to use backup API (${backupDataUrl}).`);
+return fetchData(backupDataUrl).catch((error) => {
+console.log(error);
+console.error(`Fetching data failed.`);
+});
+});
+}
+
+
 var x, y;
 
 country = "Italy"
 
 d3.json('/covid19/chartjs/data/daily_data_per_capita.json').then(data => {
+    // se carica prima l'altro file, x e y non se le trova. Fare in modo che considera tutte le x e soprattutto tutte le y
     y = d3.scaleLinear()
         .domain([0, d3.max(data[country].confirmed, d => d.y)])
         .range([graphHeight, 0]);
