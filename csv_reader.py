@@ -756,12 +756,17 @@ class CssegiCovidData:
                 country = self.replacements[country]
 
             countries.add(country)
-            if country in _res:
-                for key in self.plot_lines:
+            if country not in _res:
+                _res[country] = {key: 0 for key in self.plot_lines}
 
+            for key in self.plot_lines:
+                try:
                     _res[country][key] += int(row[key])
-            else:
-                _res[country] = {key: int(row[key]) for key in self.plot_lines}
+                except ValueError:
+                    if row[key] == '':
+                        pass
+                    else:
+                        raise(ValueError)
         return _res, countries
 
     def get_daily_data(self):
@@ -779,7 +784,7 @@ class CssegiCovidData:
                 for country in d_countries:
                     countries.add(country)
             except ValueError:
-                pass
+                print(daily_filename)
         return res, countries
 
     def get_daily_data_by_country(self, country, start_from_cases=None):
@@ -1211,10 +1216,10 @@ class CssegiCovidData:
                 population = int(self.population_by_country[country]) \
                     if country in self.population_by_country \
                     else int(self.population_by_country[self.country_translation_wp[country]])
+                inv_population_100000 = 1 / population * 100000
 
                 if country in self.country_translation_wp and self.country_translation_wp[country] in countries:
                     print("aaaaa", country, self.country_translation_wp[country])
-                data_dict = self.get_daily_data_by_country(country=country)
 
                 json_data[country] = {
                     'confirmed': [],
@@ -1226,8 +1231,8 @@ class CssegiCovidData:
                     for day in data_to_process[country][label]:
                         json_data[country][label.lower()].append({
                             'x': day,
-                            'y': data_to_process[country][label][day],
-                            #'y': data_to_process[country][label][day] / population * 100000,
+                            #'y': data_to_process[country][label][day],
+                            'y': data_to_process[country][label][day] * inv_population_100000,
                         })
             except (KeyError, ValueError):
                 if country not in self.population_by_country:
@@ -1252,10 +1257,9 @@ class CssegiCovidData:
                 population = int(self.population_by_country[country]) \
                     if country in self.population_by_country \
                     else int(self.population_by_country[self.country_translation_wp[country]])
-
+                inv_population_100000 = 1 / population * 100000
                 if country in self.country_translation_wp and self.country_translation_wp[country] in countries:
                     print("aaaaa", country, self.country_translation_wp[country])
-                data_dict = self.get_daily_data_by_country(country=country)
 
                 json_data[country] = {
                     'confirmed': [],
@@ -1267,7 +1271,7 @@ class CssegiCovidData:
                     for day in self.averaged_country_tipology_day_data[country][label]:
                         json_data[country][label.lower()].append({
                             'x': day,
-                            'y': self.averaged_country_tipology_day_data[country][label][day] / population * 100000,
+                            'y': self.averaged_country_tipology_day_data[country][label][day] *inv_population_100000,
                         })
             except (KeyError, ValueError):
                 if country not in self.population_by_country:
