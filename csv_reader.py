@@ -766,7 +766,7 @@ class CssegiCovidData:
                     if row[key] == '':
                         pass
                     else:
-                        raise(ValueError)
+                        raise ValueError
         return _res, countries
 
     def get_daily_data(self):
@@ -774,22 +774,21 @@ class CssegiCovidData:
         res = {}
         for daily_filename in os.listdir(self.cssegi_daily_reports_folder):
             try:
+                daily_filename_date = datetime.datetime.strptime(daily_filename[0:10], '%m-%d-%Y')
 
-                res[datetime.datetime.strptime(daily_filename[0:10], '%m-%d-%Y')], d_countries = self.get_data_from_dayfile(
+                res[daily_filename_date], d_countries = self.get_data_from_dayfile(
                     os.path.join(
-                        self.cssegi_daily_reports_folder, '{}.csv'.format(
-
-                            datetime.datetime.strptime(daily_filename[0:10], '%m-%d-%Y').strftime('%m-%d-%Y'))
+                        self.cssegi_daily_reports_folder, '{}.csv'.format(daily_filename_date.strftime('%m-%d-%Y'))
                     ))
                 for country in d_countries:
                     countries.add(country)
             except ValueError:
-                print(daily_filename)
+                # filename not with a date
+                pass
         return res, countries
 
     def get_daily_data_by_country(self, country, start_from_cases=None):
         """
-
         :param country:
         :param start_from_cases:
         :return: a dictionary with days as keys, and as values a dictionary of
@@ -1209,7 +1208,7 @@ class CssegiCovidData:
 
         self.daily_country_tipology_day()
 
-        data_to_process = self.cumulative_country_tipology_day_data
+        data_to_process = self.daily_country_tipology_day_data
         json_data = {}
         for country in countries:
             try:
@@ -1231,7 +1230,6 @@ class CssegiCovidData:
                     for day in data_to_process[country][label]:
                         json_data[country][label.lower()].append({
                             'x': day,
-                            #'y': data_to_process[country][label][day],
                             'y': data_to_process[country][label][day] * inv_population_100000,
                         })
             except (KeyError, ValueError):
@@ -1349,7 +1347,7 @@ if __name__ == "__main__":
         dpc_covid_data.roma_analysis(json_save=True)
         dpc_covid_data.italia_analysis(json_save=True)
         dpc_covid_data.plot_newcases_vs_totalcases_regioni(
-            'all', # ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte']
+            'all',  # ['Lombardia', 'Lazio', 'Veneto', 'Toscana', 'Emilia-Romagna', 'Calabria', 'Umbria', 'Marche', 'Piemonte']
             json_save=True
         )
         dpc_covid_data.plot_province_per_regione(regioni='all', json_save=True)
