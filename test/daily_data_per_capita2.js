@@ -4,9 +4,8 @@
 
 
 
-var country = "Italy"
 
-async function downloadData() {
+/*async function downloadData() {
     try {
         let [ddpcData, ddpcaData] = await Promise.all([
             fetch("/covid19/chartjs/data/daily_data_per_capita.json").then((response) => {return response.json()}),
@@ -18,7 +17,7 @@ async function downloadData() {
         console.log(err);
     };
 
-}
+}*/
 
 function setupSelections(chartConfig, ddpcData, ddpcaData) {
     const country1Select = document.getElementById("country1");
@@ -123,17 +122,31 @@ function updateChart(chartConfig, ddpcData, ddpcaData, country1Select) {
 
 }
 
-window.addEventListener("DOMContentLoaded", (event) => {
-    // Call start
-    (async() => {
+function ready([ddpcData, ddpcaData]) {
+    const chartConfig = setupChart();
+    const country1Select = setupSelections(chartConfig, ddpcData, ddpcaData);
+    // Initially render the chart
+    updateChart(chartConfig, ddpcData, ddpcaData, country1Select);
+}
 
-        var [ddpcData, ddpcaData] = await downloadData();
+var promises = [
+  d3.json("/covid19/chartjs/data/daily_data_per_capita.json"),
+  d3.json("/covid19/chartjs/data/daily_data_per_capita_average.json"),
+]
+
+
+//window.addEventListener("DOMContentLoaded", (event) => {
+function load(){
+    Promise.all(promises).then(ready)
+    // Call start
+    /*(async() => {
 
         const chartConfig = setupChart();
+
+        var [ddpcData, ddpcaData] = await downloadData();
         const country1Select = setupSelections(chartConfig, ddpcData, ddpcaData);
-        console.log(country1Select.options[country1Select.selectedIndex].value);
         // Initially render the chart
         updateChart(chartConfig, ddpcData, ddpcaData, country1Select);
 
-    })();
-});
+    })();*/
+};

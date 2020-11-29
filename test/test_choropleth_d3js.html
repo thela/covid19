@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>D3.JS Choropleth testS</title>
+      <style>
+        rect.bar-rect { fill: #189ad3; }
+        rect.bar-rect:hover {
+          fill: #107dac;
+          transition: all .2s;
+        }
+
+        div.tooltip-worldmap, div.tooltip-ddpc {
+          color: #222;
+          background: #fff;
+          border-radius: 3px;
+          box-shadow: 0px 0px 2px 0px #a6a6a6;
+          padding: .2em;
+          text-shadow: #f5f5f5 0 1px 0;
+          opacity: 0.9;
+          position: absolute;
+        }
+      </style>
+    </head>
+    <body onload="load()">
+        <div class="worldmap"></div>
+        <div class="daily_data_per_capita"></div>
+        <script src="https://d3js.org/d3.v6.js"></script>
+        <script src="daily_data_per_capita2.js"></script>
+        <script src="https://d3js.org/d3.v6.js"></script>
+        <script src="/covid19/chartjs/js/dependencies/topojson.min.js"></script>
+        <script src="/covid19/chartjs/js/dependencies/d3-geo-projection.min.js"></script>
+        <script src="/covid19/d3js/js/choroplet_d3.js"></script>
+        <script src="/covid19/d3js/js/daily_data_per_capita.js"></script>
+        <script src="choroplet_test.js"></script>
+    </body>
+</html>
