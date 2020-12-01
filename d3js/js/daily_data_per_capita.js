@@ -76,7 +76,7 @@ function updateDdpc(chartConfig, ddpcData, ddpcaData, country) {
                .duration(50)
                .style("opacity", 1).style("top", (event.pageY) + "px")
                        .style("left", (     event.pageX + 10) + "px")
-            tooltip_ddpc_div.html(d.y); })
+            tooltip_ddpc_div.html(d.x + ' ' + d.y); })
         .on('mouseout', function (event, d) {      //Makes the new div disappear:
           tooltip_ddpc_div.transition()
                .duration('50')
@@ -84,8 +84,12 @@ function updateDdpc(chartConfig, ddpcData, ddpcaData, country) {
         });
 
     const xAxis = d3.axisBottom(chartConfig.x)
-        .ticks(d3.timeDay.every(1));
+        .ticks(d3.timeMonth, 1)
+        .tickFormat(d3.timeFormat('%b'));
+
+        //.ticks(d3.timeDay.every(1));
     const yAxis = d3.axisLeft(chartConfig.y)
+
         .tickFormat(d => `${d}`)
         .ticks(5);
 
@@ -108,7 +112,7 @@ function updateDdpc(chartConfig, ddpcData, ddpcaData, country) {
         .append("path")
         .datum(ddpcaData[country].confirmed)
         .attr("fill", "none")
-        .attr("stroke", "steelblue")
+        .attr("stroke", "#ab1111")
         .attr("stroke-width", 1.5)
         .attr("d", d3.line()
             .x(function(d) { return chartConfig.x(d.x) })
