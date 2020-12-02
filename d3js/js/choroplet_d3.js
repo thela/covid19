@@ -22,7 +22,7 @@ function setupWorldmapChart() {
     // Set the dimensions and margins of the graph
     const width = 1000;
     const height = 500;
-    const margin = {'top': 20, 'right': 20, 'bottom': 100, 'left': 100};
+    const margin = {'top': 20, 'right': 20, 'bottom': 20, 'left': 20};
     const graphWidth = width - margin.left - margin.right;
     const graphHeight = height - margin.top - margin.bottom;
 
@@ -30,16 +30,35 @@ function setupWorldmapChart() {
     const x = d3.scaleTime().range([0, width]);
     const y = d3.scaleLinear().range([height, 0]);
     // Append the svg object to the body of the page
-    const svg = d3.select('.worldmap')
+    /*const svg = d3.select('.worldmap')
       .append('svg')
       .attr('width', width)
-      .attr('height', height);
+      .attr('height', height);*/
+
+    const svg_container = d3.select('.worldmap').classed("svg-container", true)
+        .append("div")
+    const svg = svg_container
+        // Container class to make it responsive.
+        .append("svg")
+        // Responsive SVG needs these 2 attributes and no width and height attr.
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        // Class to make it responsive.
+        .classed("svg-content-responsive", true)
 
     const graph = svg.append('g')
         .attr('width', graphWidth)
         .attr('height', graphHeight)
         .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
+    let zoom = d3.zoom()
+       .scaleExtent([1, 5])
+       .translateExtent([[-500, -300], [1500, 1000]])
+       .on('zoom', (event, d) => {
+           svg.attr('transform', event.transform)
+       });
+
+    svg_container.call(zoom);
     return { graph, x, y, width, graphHeight };
 }
 
@@ -66,3 +85,16 @@ function updateWorldmapChart(chartConfig, countries, country_clicked) {
                .style("opacity", 0);
         });
 }
+
+function ready_worldmap(world_data, country_clicked) {
+    var countries = topojson.feature(world_data, world_data.objects.countries).features;
+    const chartConfig = setupWorldmapChart();
+
+    updateWorldmapChart(chartConfig, countries, country_clicked);
+
+    return chartConfig;
+}
+
+var promises_worldmap = [
+    d3.json('https://unpkg.com/world-atlas/countries-50m.json')
+]

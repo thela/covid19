@@ -1,0 +1,10 @@
+
+rect.bar-rect {
+    fill: #d61515;
+    opacity: .1;
+}
+rect.bar-rect:hover {
+    fill: #d61515;
+    opacity: 1.;
+  transition: all .2s;
+}

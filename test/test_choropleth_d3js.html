@@ -4,13 +4,9 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>D3.JS Choropleth testS</title>
+      <link rel="stylesheet" type="text/css" href="/covid19/d3js/css/svg_responsive.css">
+      <link rel="stylesheet" type="text/css" href="/covid19/d3js/css/ddpc_style.css">
       <style>
-        rect.bar-rect { fill: #d61515; }
-        rect.bar-rect:hover {
-          fill: #107dac;
-          transition: all .2s;
-        }
-
         div.tooltip-worldmap, div.tooltip-ddpc {
           color: #222;
           background: #fff;
@@ -21,11 +17,21 @@
           opacity: 0.9;
           position: absolute;
         }
+
+        div.maincontent {
+            width: 80%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
       </style>
     </head>
     <body onload="load()">
-        <div class="worldmap"></div>
-        <div class="daily_data_per_capita"></div>
+        <div class="maincontent">
+            <div class="worldmap"></div>
+            <div class="daily_data_per_capita"></div>
+        </div>
+
         <script src="https://d3js.org/d3.v6.js"></script>
         <script src="daily_data_per_capita2.js"></script>
         <script src="https://d3js.org/d3.v6.js"></script>

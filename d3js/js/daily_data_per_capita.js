@@ -18,9 +18,9 @@ function setupSelections(chartConfig, ddpcData, ddpcaData) {
 
 function setupDdpc() {
     // Set the dimensions and margins of the graph
-    const width = 1000;
-    const height = 600;
-    const margin = {'top': 20, 'right': 20, 'bottom': 100, 'left': 100};
+    const width = 600;
+    const height = 400;
+    const margin = {'top': 20, 'right': 20, 'bottom': 20, 'left': 50};
     const graphWidth = width - margin.left - margin.right;
     const graphHeight = height - margin.top - margin.bottom;
 
@@ -29,10 +29,22 @@ function setupDdpc() {
     const y = d3.scaleLinear().range([height, 0]);
 
     // Append the svg object to the body of the page
-    const svg = d3.select('.daily_data_per_capita')
+    /*const svg = d3.select('.daily_data_per_capita')
       .append('svg')
       .attr('width', width)
-      .attr('height', height);
+      .attr('height', height);*/
+
+    const svg = d3.select('.daily_data_per_capita')
+        .append("div")
+        // Container class to make it responsive.
+        .classed("svg-container", true)
+        .append("svg")
+        // Responsive SVG needs these 2 attributes and no width and height attr.
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        // Class to make it responsive.
+        .classed("svg-content-responsive", true)
+
     const graph = svg.append('g')
         .attr('width', graphWidth)
         .attr('height', graphHeight)
@@ -131,3 +143,16 @@ function updateDdpc(chartConfig, ddpcData, ddpcaData, country) {
         });
 
 }
+
+function ready_ddpc(ddpcData, ddpcaData) {
+    const DdpcConfig = setupDdpc();
+    // Initially render the chart
+    updateDdpc(DdpcConfig, ddpcData, ddpcaData, 'Italy');
+
+    return DdpcConfig;
+}
+
+var promises_ddpc = [
+  d3.json("/covid19/chartjs/data/daily_data_per_capita.json"),
+  d3.json("/covid19/chartjs/data/daily_data_per_capita_average.json"),
+]
