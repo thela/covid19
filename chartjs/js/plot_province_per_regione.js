@@ -41,7 +41,7 @@ if ($element !== null){
         options: options
     });
 
-    $.getJSON('data/province_per_regione.json', function(data) {
+    $.getJSON('/covid19/data/province_per_regione.json', function(data) {
         //data is the JSON string
         province_per_regione_data = data;
         pprr_regioni = Object.keys(province_per_regione_data).map(function(item) {
@@ -150,7 +150,7 @@ if ($element !== null){
         options: options,
     });
 
-    $.getJSON('data/nuovi_malati_per_regione.json', function(data) {
+    $.getJSON('/covid19/data/nuovi_malati_per_regione.json', function(data) {
         nuovi_malati_per_regione = data;
         nmpr_regioni = Object.keys(nuovi_malati_per_regione).map(function(item) {
             return item;

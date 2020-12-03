@@ -45,7 +45,7 @@ var x, y;
 
 country = "Italy"
 
-d3.json('/covid19/chartjs/data/daily_data_per_capita.json').then(data => {
+d3.json('/covid19/data/daily_data_per_capita.json').then(data => {
     // se carica prima l'altro file, x e y non se le trova. Fare in modo che considera tutte le x e soprattutto tutte le y
     y = d3.scaleLinear()
         .domain([0, d3.max(data[country].confirmed, d => d.y)])
@@ -100,7 +100,7 @@ d3.json('/covid19/chartjs/data/daily_data_per_capita.json').then(data => {
 });
 
 
-d3.json('/covid19/chartjs/data/daily_data_per_capita_average.json').then(data => {
+d3.json('/covid19/data/daily_data_per_capita_average.json').then(data => {
     /*const y = d3.scaleLinear()
         .domain([0, d3.max(data[country].confirmed, d => d.y)])
         .range([graphHeight, 0]);

@@ -21,7 +21,7 @@ if ($element !== null){
         }, regioni;
 
     var jsonData = $.ajax({
-        url: 'data/plot_newcases_vs_totalcases_regioni.json',
+        url: '/covid19/data/plot_newcases_vs_totalcases_regioni.json',
         dataType: 'json',
     }).done(function(jsonData)
     {

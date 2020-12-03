@@ -64,7 +64,7 @@ function updateDdpc(chartConfig, ddpcData, ddpcaData, country) {
         .range([chartConfig.graphHeight, 0]);
 
     chartConfig.x = d3.scaleBand()
-        .domain(ddpcData[country].confirmed.map(item => item.x))
+        .domain(ddpcData[country].confirmed.map(item => Date.parse(item.x)))
         .range([0, 500])
         .paddingInner(0.2)
         .paddingOuter(0.2);
@@ -153,6 +153,6 @@ function ready_ddpc(ddpcData, ddpcaData) {
 }
 
 var promises_ddpc = [
-  d3.json("/covid19/chartjs/data/daily_data_per_capita.json"),
-  d3.json("/covid19/chartjs/data/daily_data_per_capita_average.json"),
+  d3.json("/covid19/data/daily_data_per_capita.json"),
+  d3.json("/covid19/data/daily_data_per_capita_average.json"),
 ]

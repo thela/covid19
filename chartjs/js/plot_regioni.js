@@ -125,7 +125,7 @@ if ($element !== null){
         options: options
     });
 
-    $.getJSON('data/data_regione.json', function(data) {
+    $.getJSON('/covid19/data/data_regione.json', function(data) {
         //data is the JSON string
         regioni_data = data;
         r_regioni = Object.keys(regioni_data).map(function(item) {

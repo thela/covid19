@@ -12,7 +12,7 @@ if ($element !== null){
         countries;
 
     var jsonData = $.ajax({
-        url: 'data/plot_newcases_vs_totalcases.json',
+        url: '/covid19/data/plot_newcases_vs_totalcases.json',
         dataType: 'json',
     }).done(function(jsonData)
     {

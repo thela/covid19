@@ -8,8 +8,8 @@
 /*async function downloadData() {
     try {
         let [ddpcData, ddpcaData] = await Promise.all([
-            fetch("/covid19/chartjs/data/daily_data_per_capita.json").then((response) => {return response.json()}),
-            fetch("/covid19/chartjs/data/daily_data_per_capita_average.json").then((response) => {return response.json()})
+            fetch("/covid19/data/daily_data_per_capita.json").then((response) => {return response.json()}),
+            fetch("/covid19/data/daily_data_per_capita_average.json").then((response) => {return response.json()})
         ]);
         return [ddpcData, ddpcaData]
     }
@@ -130,8 +130,8 @@ function ready([ddpcData, ddpcaData]) {
 }
 
 var promises = [
-  d3.json("/covid19/chartjs/data/daily_data_per_capita.json"),
-  d3.json("/covid19/chartjs/data/daily_data_per_capita_average.json"),
+  d3.json("/covid19/data/daily_data_per_capita.json"),
+  d3.json("/covid19/data/daily_data_per_capita_average.json"),
 ]
 
 

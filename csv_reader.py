@@ -248,7 +248,7 @@ class DpcCovidData:
                     )
 
         if json_save:
-            with open('chartjs/data/province_per_regione.json', 'w') as json_fp:
+            with open('data/province_per_regione.json', 'w') as json_fp:
                 json.dump(
                     data_italia,
                     fp=json_fp,
@@ -283,7 +283,7 @@ class DpcCovidData:
 
                     )
 
-        with open('chartjs/data/data_regione.json', 'w') as json_fp:
+        with open('data/data_regione.json', 'w') as json_fp:
             json.dump(
                 data_italia,
                 fp=json_fp,
@@ -338,7 +338,7 @@ class DpcCovidData:
                     'y': nuovi_casi/nuovi_tamponi_dict[day]*100 if nuovi_tamponi_dict[day] != 0 else 0
                 })
 
-        with open('chartjs/data/data_tamponi.json', 'w') as json_fp:
+        with open('data/data_tamponi.json', 'w') as json_fp:
             json.dump(
                 data_italia,
                 fp=json_fp,
@@ -386,7 +386,7 @@ class DpcCovidData:
                         )
 
         if json_save:
-            with open('chartjs/data/nuovi_malati_per_regione.json', 'w') as json_fp:
+            with open('data/nuovi_malati_per_regione.json', 'w') as json_fp:
                 json.dump(
                     data_italia,
                     fp=json_fp,
@@ -441,7 +441,7 @@ class DpcCovidData:
                         )
 
         if json_save:
-            with open('chartjs/data/nuovi_malati_per_regione.json', 'w') as json_fp:
+            with open('data/nuovi_malati_per_regione.json', 'w') as json_fp:
                 json.dump(
                     data_italia,
                     fp=json_fp,
@@ -492,7 +492,7 @@ class DpcCovidData:
         provincia_data = {day: data_province[day][provincia] for day in data_province.keys()}
 
         if json_save:
-            with open('chartjs/data/roma_analysis.json', 'w') as json_fp:
+            with open('data/roma_analysis.json', 'w') as json_fp:
                 json.dump(
                     {day.__str__(): {'totale_casi': int(provincia_data[day]['totale_casi'])} for day in x_list},
                     fp=json_fp,
@@ -622,7 +622,7 @@ class DpcCovidData:
                 plots.append(plot_i)
 
         if json_save:
-            with open('chartjs/data/plot_newcases_vs_totalcases_regioni.json', 'w') as json_fp:
+            with open('data/plot_newcases_vs_totalcases_regioni.json', 'w') as json_fp:
                 json.dump(
                     json_data,
                     fp=json_fp,
@@ -641,7 +641,7 @@ class DpcCovidData:
         x_list = list(self.data_nazionale.keys())
         x_list.sort()
         if json_save:
-            with open('chartjs/data/italia_analysis.json', 'w') as json_fp:
+            with open('data/italia_analysis.json', 'w') as json_fp:
                 json.dump(
                     {day.__str__(): {key: int(self.data_nazionale[day][key]) for key in
                            ['terapia_intensiva', 'ricoverati_con_sintomi', 'isolamento_domiciliare', 'dimessi_guariti',
@@ -707,7 +707,7 @@ class CssegiCovidData:
         "Russian Federation": "Russia",
         "Congo (Kinshasa)": "Dem. Rep. Congo",
     }
-
+    # name on map: name on population file
     country_translation_wp = {
         'United States of America': 'United States',
         "Saint Martin": "St. Martin (French part)",
@@ -730,7 +730,10 @@ class CssegiCovidData:
         "Brunei": "Brunei Darussalam",
         "Egypt": "Egypt, Arab Rep.",
         "Congo": "Congo, Rep.",
-        "Gambia, The": "The Gambia",
+        "The Gambia": "The Gambia",
+        "Russia": "Russian Federation",
+        "Republic of the Congo": "Central African Rep.",
+        "Ivory Coast": "Cote d'Ivoire"
     }
 
     @staticmethod
@@ -778,7 +781,7 @@ class CssegiCovidData:
 
                 res[daily_filename_date], d_countries = self.get_data_from_dayfile(
                     os.path.join(
-                        self.cssegi_daily_reports_folder, '{}.csv'.format(daily_filename_date.strftime('%m-%d-%Y'))
+                        self.cssegi_daily_reports_folder, f'{daily_filename_date.strftime("%m-%d-%Y")}.csv'
                     ))
                 for country in d_countries:
                     countries.add(country)
@@ -917,31 +920,22 @@ class CssegiCovidData:
 
                     daily_data[day] = day_bin['totalvalue'] / ((day_bin['most_recent_day'] - day_bin['oldest_day']).days+1)
 
-            return daily_data
+            return daily_data, daily_data[ordered_days[-1]]
 
         if not self.averaged_country_tipology_day_data:
             self.daily_country_tipology_day()
             self.averaged_country_tipology_day_data = {}
+            self.averaged_country_tipology_last_day_data = {}
 
             for country, country_data in self.daily_country_tipology_day_data.items():
                 self.averaged_country_tipology_day_data[country] = {
                 }
+                self.averaged_country_tipology_last_day_data[country] = {
+                }
+
                 for tipology, tipology_data in country_data.items():
-                    '''daily_data = {}
-                    previous_day = None
-                    ordered_days = list(tipology_data.keys())
-                    ordered_days.sort()
-                    for day in ordered_days:
-                        if not previous_day:
-                            daily_data[day] = tipology_data[day]
-                        else:
-                            daily_data[day] = tipology_data[day] - tipology_data[previous_day]
-
-                        print(country, tipology, day, tipology_data[day], daily_data[day])
-
-                        # at the end of the loop, day becomes previous_day
-                        previous_day = day'''
-                    self.averaged_country_tipology_day_data[country][tipology] = process_tipology(tipology_data, timebin_size)
+                    self.averaged_country_tipology_day_data[country][tipology],\
+                        self.averaged_country_tipology_last_day_data[country][tipology]= process_tipology(tipology_data, timebin_size)
 
     def plot_countries(self, countries, ax=None, json_save=False):
         if not ax and not json_save:
@@ -998,7 +992,7 @@ class CssegiCovidData:
                 plots.append(plot_i)
 
         if json_save:
-            with open('chartjs/data/plot_countries.json', 'w') as json_fp:
+            with open('data/plot_countries.json', 'w') as json_fp:
                 json.dump(
                     json_data,
                     fp=json_fp,
@@ -1110,7 +1104,7 @@ class CssegiCovidData:
                 plots.append(plot_i)
 
         if json_save:
-            with open('chartjs/data/plot_newcases_vs_totalcases.json', 'w') as json_fp:
+            with open('data/plot_newcases_vs_totalcases.json', 'w') as json_fp:
                 json.dump(
                     json_data,
                     fp=json_fp,
@@ -1194,7 +1188,7 @@ class CssegiCovidData:
             except (KeyError, ValueError):
                 if country not in self.population_by_country:
                     print(country)
-        with open('chartjs/data/weekly_data_per_capita.json', 'w') as json_fp:
+        with open('data/weekly_data_per_capita.json', 'w') as json_fp:
             json.dump(
                 json_data,
                 fp=json_fp,
@@ -1234,9 +1228,10 @@ class CssegiCovidData:
                         })
             except (KeyError, ValueError):
                 if country not in self.population_by_country:
-                    print(country)
+                    pass
+                    #print(country)
 
-        with open('chartjs/data/daily_data_per_capita.json', 'w') as json_fp:
+        with open('data/daily_data_per_capita.json', 'w') as json_fp:
             json.dump(
                 json_data,
                 fp=json_fp,
@@ -1256,8 +1251,6 @@ class CssegiCovidData:
                     if country in self.population_by_country \
                     else int(self.population_by_country[self.country_translation_wp[country]])
                 inv_population_100000 = 1 / population * 100000
-                if country in self.country_translation_wp and self.country_translation_wp[country] in countries:
-                    print("aaaaa", country, self.country_translation_wp[country])
 
                 json_data[country] = {
                     'confirmed': [],
@@ -1269,13 +1262,42 @@ class CssegiCovidData:
                     for day in self.averaged_country_tipology_day_data[country][label]:
                         json_data[country][label.lower()].append({
                             'x': day,
-                            'y': self.averaged_country_tipology_day_data[country][label][day] *inv_population_100000,
+                            'y': self.averaged_country_tipology_day_data[country][label][day] * inv_population_100000,
                         })
             except (KeyError, ValueError):
                 if country not in self.population_by_country:
                     print(country)
 
-        with open('chartjs/data/daily_data_per_capita_average.json', 'w') as json_fp:
+        with open('data/daily_data_per_capita_average.json', 'w') as json_fp:
+            json.dump(
+                json_data,
+                fp=json_fp,
+                default=json_serial
+            )
+
+    def country_status_per_capita_average(self, countries):
+        if countries == 'all':
+            countries = self.countries
+
+        self.averaged_country_tipology_day(7)
+        json_data = {}
+        for country in countries:
+            try:
+                population = int(self.population_by_country[country]) \
+                    if country in self.population_by_country \
+                    else int(self.population_by_country[self.country_translation_wp[country]])
+                inv_population_100000 = 1 / population * 100000
+
+                json_data[country] = (
+                        self.averaged_country_tipology_last_day_data[country]['confirmed']+self.averaged_country_tipology_last_day_data[country]['deaths']
+                ) * inv_population_100000
+
+            except (KeyError, ValueError):
+                if country not in self.population_by_country:
+                    pass
+                    #print(country)
+
+        with open('data/country_status_per_capita_average.json', 'w') as json_fp:
             json.dump(
                 json_data,
                 fp=json_fp,
@@ -1368,6 +1390,7 @@ if __name__ == "__main__":
         covid_data.weekly_data_per_capita('all')
         covid_data.daily_data_per_capita('all')
         covid_data.daily_data_per_capita_average('all')
+        covid_data.country_status_per_capita_average('all')
     else:
         import matplotlib as mpl
         import matplotlib.pyplot as plt

@@ -1,4 +1,6 @@
 
+var countryColour = d3.scaleLinear().domain([1,50])
+  .range(["lightgreen", "red"])
 
 var tooltip_div = d3.select("body").append("div")
      .attr("class", "tooltip-worldmap")
@@ -63,13 +65,19 @@ function setupWorldmapChart() {
 }
 
 
-function updateWorldmapChart(chartConfig, countries, country_clicked) {
+function updateWorldmapChart(chartConfig, countries, country_status, country_clicked) {
     const path = d3.geoPath(d3.geoNaturalEarth1(), chartConfig.svg)
 
     chartConfig.graph.selectAll("path")
         .data(countries)
           .enter().append("path")
-            .attr("d", path)     //Our new hover effects
+            .attr("d", path)
+        .attr("fill", function(d){
+            if(country_status.hasOwnProperty(d.properties.name)){
+                return countryColour(country_status[d.properties.name])
+            } else {
+                return d3.rgb("silver");
+                } })    //Our new hover effects
         .on('mouseover', function (event, d) {
             tooltip_div.transition()
                .duration(50)
@@ -86,15 +94,16 @@ function updateWorldmapChart(chartConfig, countries, country_clicked) {
         });
 }
 
-function ready_worldmap(world_data, country_clicked) {
+function ready_worldmap(world_data, country_status, country_clicked) {
     var countries = topojson.feature(world_data, world_data.objects.countries).features;
     const chartConfig = setupWorldmapChart();
 
-    updateWorldmapChart(chartConfig, countries, country_clicked);
+    updateWorldmapChart(chartConfig, countries, country_status, country_clicked);
 
     return chartConfig;
 }
 
 var promises_worldmap = [
-    d3.json('https://unpkg.com/world-atlas/countries-50m.json')
+    d3.json('https://unpkg.com/world-atlas/countries-50m.json'),
+    d3.json("/covid19/data/country_status_per_capita_average.json"),
 ]

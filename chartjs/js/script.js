@@ -23,7 +23,7 @@ if ($element !== null){
 
     //using jQuery ajax method get data from the external file. ( while using react you will do it differently)
     var jsonData = $.ajax({
-        url: 'data/italia_analysis.json',
+        url: '/covid19/data/italia_analysis.json',
         dataType: 'json',
     }).done(function(results)
     {
@@ -147,7 +147,7 @@ if ($element !== null){
         };
 
     var jsonData = $.ajax({
-        url: 'data/roma_analysis.json',
+        url: '/covid19/data/roma_analysis.json',
         dataType: 'json',
     }).done(function(results)
     {

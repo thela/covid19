@@ -96,7 +96,7 @@ if ($element !== null){
         options: options
     });
 
-    $.getJSON('data/data_tamponi.json', function(data) {
+    $.getJSON('/covid19/data/data_tamponi.json', function(data) {
         //data is the JSON string
         tamponi_data = data;
         r_regioni = Object.keys(tamponi_data).map(function(item) {

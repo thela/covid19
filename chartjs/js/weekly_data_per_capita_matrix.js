@@ -18,12 +18,12 @@ if ($element !== null){
         'active': 'rgba(0, 255, 0, 1)',
     };
 
-    //$.getJSON('data/plot_countries.json', function(data) {
+    //$.getJSON('/covid19/data/plot_countries.json', function(data) {
         //data is the JSON string
     //})
 
     var jsonData = $.ajax({
-        url: 'data/weekly_data_per_capita.json',
+        url: '/covid19/data/weekly_data_per_capita.json',
         dataType: 'json',
     }).done(function(jsonData)
     {
